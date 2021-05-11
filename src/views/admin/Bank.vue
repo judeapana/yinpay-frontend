@@ -1,0 +1,66 @@
+<template>
+    <div>
+        <v-card>
+            <v-toolbar dark elevation="0">
+                <v-toolbar-title>
+                    Banks
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-tabs>
+                <v-tab>All</v-tab>
+                <v-tab>Active</v-tab>
+                <v-tab>Inactive</v-tab>
+                <v-tab>Primary</v-tab>
+                <v-tab-item>
+                    <empty class="text-center">
+                        <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+                    </empty>
+                </v-tab-item>
+            </v-tabs>
+
+        </v-card>
+        <FormDrawer title="Bank" :visible="visible" v-on:onClose="onClose">
+            <BankForm></BankForm>
+        </FormDrawer>
+    </div>
+</template>
+
+<script>
+    import {Empty} from "ant-design-vue";
+    import FormDrawer from "../../components/drawer/FormDrawer";
+    import BankForm from "../../components/forms/admin/BankForm";
+
+    export default {
+        name: 'Bank',
+        components: {
+            BankForm,
+            FormDrawer, Empty
+        },
+        data() {
+            return {
+                visible: false,
+            }
+        },
+        methods: {
+            OnUpdate(pk) {
+                console.log(pk)
+            },
+            OnDelete(pk) {
+                console.log(pk)
+            },
+            afterVisibleChange(val) {
+                console.log('visible', val);
+            },
+            showDrawer() {
+                this.visible = true;
+            },
+            onClose() {
+                this.visible = false;
+            },
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
