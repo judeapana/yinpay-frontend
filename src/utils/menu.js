@@ -10,5 +10,5 @@ export const menus = [
     {title: 'Departments', icon: 'mdi-account-group-outline', to: {name: 'department'}},
     {title: 'Banks', icon: 'mdi-account-group-outline', to: {name: 'bank'}},
     {title: 'Personnel Grouping', icon: 'mdi-account-group-outline', to: {name: 'personnel-group'}},
-    {title: 'Settings', icon: 'mdi-account-group-outline', to: ''},
+    {title: 'Settings', icon: 'mdi-account-group-outline', to: {name: 'settings'}},
 ]

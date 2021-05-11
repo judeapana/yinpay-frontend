@@ -21,6 +21,7 @@
         },
         data() {
             return {
+                value: 100,
                 form: {
                     bank_name: '',
                     account_number: '',

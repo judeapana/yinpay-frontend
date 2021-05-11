@@ -13,13 +13,13 @@
                 <v-tab>Primary</v-tab>
                 <v-tab-item>
                     <empty class="text-center">
-                        <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
                     </empty>
                 </v-tab-item>
             </v-tabs>
 
         </v-card>
-        <FormDrawer title="Bank" :visible="visible" v-on:onClose="onClose">
+        <FormDrawer :visible="visible" title="Bank" v-on:onClose="onClose">
             <BankForm></BankForm>
         </FormDrawer>
     </div>

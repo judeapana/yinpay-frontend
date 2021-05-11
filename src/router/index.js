@@ -33,6 +33,7 @@ import UserSpouse from "../views/admin/users/UserSpouse";
 import UserPosition from "../views/admin/users/UserPosition";
 import UserAssoc from "../views/admin/users/UserAssoc";
 import UserNextOfKin from "../views/admin/users/UserNextOfKin";
+import Settings from "../views/admin/Settings";
 
 Vue.use(VueRouter)
 
@@ -108,6 +109,7 @@ const routes = [
             {path: 'departments', name: 'department', component: Department},
             {path: 'banks', name: 'bank', component: Bank},
             {path: 'personnel-group', name: 'personnel-group', component: PersonnelGroup},
+            {path: 'settings', name: 'settings', component: Settings},
             {path: 'memos', name: 'memo', component: Memo},
             {
                 path: 'users', name: 'user', component: User, redirect: 'users/all',
