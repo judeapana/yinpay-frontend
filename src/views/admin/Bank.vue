@@ -20,7 +20,7 @@
 
         </v-card>
         <FormDrawer :visible="visible" title="Bank" v-on:onClose="onClose">
-            <BankForm></BankForm>
+            <BankForm button="Create"></BankForm>
         </FormDrawer>
     </div>
 </template>

@@ -7,12 +7,12 @@
 
 <script>
     export default {
-        name: 'BankForm',
+        name: 'UserSsnForm',
         props: {
             button: {
                 type: String
             },
-            bank: {
+            ssn: {
                 type: Object
             }
         },
@@ -20,11 +20,8 @@
             return {
                 form: {
                     user_id: {},
-                    date: '',
-                    option: ['BTC ADDRESS', 'BANK', 'ETC ADDRESS'],
-                    account_name: '',
-                    address: '',
-                    account_no: '',
+                    no: '',
+                    notes: '',
                     active: false
                 }
             }

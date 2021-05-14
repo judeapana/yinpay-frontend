@@ -1,14 +1,20 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
+        <v-btn type="submit" v-text="button"></v-btn>
     </v-form>
 </template>
 
 <script>
     export default {
-        name: 'UserAssocForm',
+        name: 'UserTinForm',
         data() {
             return {
-                form: {}
+                form: {
+                    user_id: {},
+                    no: '',
+                    notes: '',
+                    active: false
+                }
             }
         },
     }

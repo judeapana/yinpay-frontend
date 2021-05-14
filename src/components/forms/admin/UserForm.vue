@@ -5,6 +5,8 @@
         <v-text-field label="Middle Name"></v-text-field>
         <v-text-field label="Staff ID"></v-text-field>
         <v-text-field label="Date Of Birth"></v-text-field>
+                <v-btn v-text="button" type="submit"></v-btn>
+
     </v-form>
 </template>
 

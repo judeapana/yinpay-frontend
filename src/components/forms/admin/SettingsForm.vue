@@ -15,6 +15,8 @@
         <v-text-field v-model="form.send_payslip"></v-text-field>
         <v-text-field v-model="form.enable_otp_verification"></v-text-field>
         <v-text-field v-model="form.provide_user_portal"></v-text-field>
+                <v-btn v-text="button" type="submit"></v-btn>
+
     </v-form>
 </template>
 

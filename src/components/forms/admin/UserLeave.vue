@@ -1,5 +1,6 @@
 <template>
     <v-form @submit="$emit('on-submit',form)">
+        <v-btn v-text="button" type="submit"></v-btn>
 
     </v-form>
 </template>

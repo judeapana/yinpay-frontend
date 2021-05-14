@@ -5,6 +5,8 @@
         <v-text-field label="Account Code" v-model="form.code"></v-text-field>
         <v-text-field label="Currency" v-model="form.currency"></v-text-field>
         <v-switch label="Primary" v-model="form.primary"></v-switch>
+        <v-btn type="submit" v-text="button"></v-btn>
+
     </v-form>
 </template>
 

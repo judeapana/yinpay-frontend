@@ -37,7 +37,7 @@ import Settings from "../views/admin/Settings";
 
 Vue.use(VueRouter)
 
-const routes = [
+export const routes = [
     {
         path: '/app',
         redirect: 'app/sign-in',
