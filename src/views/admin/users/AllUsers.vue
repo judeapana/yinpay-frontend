@@ -4,8 +4,8 @@
             <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
         </empty>
 
-        <FormDrawer title="Bank" :visible="visible" v-on:onClose="onClose">
-            <UserForm></UserForm>
+        <FormDrawer title="Create A New User" :visible="visible" v-on:onClose="onClose">
+            <UserForm button="Add"></UserForm>
         </FormDrawer>
     </div>
 </template>

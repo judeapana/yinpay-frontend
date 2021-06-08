@@ -1,6 +1,6 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-        <v-text-field v-model="form.email" type="email" label="Email Address"></v-text-field>
+        <v-text-field :disabled="true" v-model="form.email" type="email" label="Email Address"></v-text-field>
         <v-btn v-text="button" type="submit"></v-btn>
     </v-form>
 </template>

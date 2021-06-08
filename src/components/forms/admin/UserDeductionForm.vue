@@ -1,34 +1,29 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-                <v-btn v-text="button" type="submit"></v-btn>
+        <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>
-
 <script>
     export default {
-        name: 'UserSsnForm',
+        name: 'UserDeductionForm',
         props: {
+            deduction: {
+                type: Object
+            },
             button: {
                 type: String
-            },
-            ssn: {
-                type: Object
             }
         },
         data() {
             return {
                 form: {
-                    user_id: {},
-                    no: '',
-                    notes: '',
-                    active: false
+                    user_meta: {},
+                    deduction_group: {},
+                    rate: 0,
+                    disabled: false
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>

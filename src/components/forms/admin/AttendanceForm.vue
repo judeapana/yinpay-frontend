@@ -1,35 +1,31 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-        <v-btn v-text="button" type="submit"></v-btn>
 
+        <v-btn type="submit" v-text="button"></v-btn>
     </v-form>
-</template>
 
+</template>
 <script>
     export default {
-        name: 'RoleForm',
+        name: 'AttendanceForm',
         props: {
-            role: {
+            attendance: {
                 type: Object
             },
             button: {
                 type: String
             }
-        }, data() {
+        },
+        data() {
             return {
                 form: {
-                    name: '',
-                    description: '',
-                    active: false,
-                    abilities: [
-
-                    ]
+                    name: "",
+                    day: "",
+                    period: {},
+                    disabled: false,
+                    notes: ""
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>

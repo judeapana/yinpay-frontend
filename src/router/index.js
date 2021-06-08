@@ -5,7 +5,6 @@ import SignUp from "../views/auth/SignUp";
 import ResetPwd from "../views/auth/ResetPwd";
 import ForgotPwd from "../views/auth/ForgotPwd";
 import ActivateAccount from "../views/auth/ActivateAccount";
-import CompleteActivation from "../views/auth/CompleteActivation";
 import Home from "../views/home/Home";
 import Docs from "../views/home/Docs";
 import AppIndex from "../views/auth/index"
@@ -14,7 +13,6 @@ import PageNotFound from "../views/errors/PageNotFound";
 import Forbidden from "../views/errors/Forbidden";
 import Unauthorized from "../views/errors/Unauthorized";
 import ServiceUnavailable from "../views/errors/ServiceUnavailable";
-import Kyc from "../views/auth/Kyc";
 import AdminDashboard from "../views/admin/Dashboard";
 import AdminIndex from '../views/admin/index'
 import Department from "../views/admin/Department";
@@ -34,6 +32,8 @@ import UserPosition from "../views/admin/users/UserPosition";
 import UserAssoc from "../views/admin/users/UserAssoc";
 import UserNextOfKin from "../views/admin/users/UserNextOfKin";
 import Settings from "../views/admin/Settings";
+import {isAuthenticated} from "../utils";
+import store from '../store/index'
 
 Vue.use(VueRouter)
 
@@ -67,17 +67,7 @@ export const routes = [
                 path: 'activate-account',
                 name: 'ActivateAccount',
                 component: ActivateAccount
-            },
-            {
-                path: 'kyc',
-                name: 'Kyc',
-                component: Kyc
-            },
-            {
-                path: 'complete-activation',
-                name: 'CompleteActivation',
-                component: CompleteActivation
-            },
+            }
         ]
     },
     {
@@ -154,6 +144,23 @@ const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    const {loginRequired} = to.meta;
+    if (loginRequired && !isAuthenticated()) {
+        return next({name: 'SignIn', query: {return: to.path}})
+    }
+    if (loginRequired && isAuthenticated()) {
+        return next({name: 'Unauthorized'})
+    }
+
+    store.dispatch('_loading', true)
+    next()
+
+})
+router.afterEach(() => {
+    store.dispatch('_loading', false)
 })
 
 export default router

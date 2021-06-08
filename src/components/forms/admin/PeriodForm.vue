@@ -1,32 +1,30 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-                <v-btn v-text="button" type="submit"></v-btn>
+        <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>
-
 <script>
     export default {
-        name: 'UserAssocForm',
+        name: 'PeriodForm',
         props: {
+            period: {
+                type: Object
+            },
             button: {
                 type: String
-            },
-            assoc: {
-                type: Object
             }
         },
         data() {
             return {
                 form: {
-                    user_id: {},
-                    assoc_id: {},
+                    name: "",
+                    month: "",
+                    make_payment: "",
+                    disabled: false,
+                    notes: ""
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>

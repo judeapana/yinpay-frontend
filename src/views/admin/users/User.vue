@@ -25,13 +25,10 @@
             return {
                 tabs: [{icon: 'mdi-account', name: 'user-all', title: 'Users'},
                     {icon: 'mdi-account', name: 'user-bank', title: 'Bank'},
-                    {icon: 'mdi-account', name: 'user-tin', title: 'Tin'},
-                    {icon: 'mdi-account', name: 'user-ssn', title: 'Ssn'},
                     {icon: 'mdi-account', name: 'user-docs', title: 'Docs'},
                     {icon: 'mdi-account', name: 'user-spouse', title: 'Spouse'},
-                    {icon: 'mdi-account', name: 'next-of-kin', title: 'Next-Of-Kin'},
-                    {icon: 'mdi-account', name: 'user-position', title: 'Positions'},
-                    {icon: 'mdi-account', name: 'user-assoc', title: 'Associations'},]
+                    {icon: 'mdi-account', name: 'next-of-kin', title: 'Next-Of-Kin'}
+                    ]
             }
         },
     }

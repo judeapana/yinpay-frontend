@@ -4,31 +4,29 @@
 
     </v-form>
 </template>
-
 <script>
     export default {
-        name: 'AssocForm',
+        name: 'EarningGroupForm',
         props: {
+            earning: {
+                type: Object
+            },
             button: {
                 type: String
-            },
-            assoc: {
-                type: Object
             }
         },
         data() {
             return {
                 form: {
-                    name: '',
-                    active: '',
-                    description: ''
-
+                    name: "",
+                    personnel_group: {},
+                    amount: "",
+                    disabled: false,
+                    notes: "",
+                    per_day: false,
+                    allowance: false
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>

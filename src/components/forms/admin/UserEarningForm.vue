@@ -1,32 +1,29 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-                <v-btn v-text="button" type="submit"></v-btn>
+        <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>
-
 <script>
     export default {
-        name: 'UserPosition',
+        name: 'UserEarningForm',
         props: {
+            earning: {
+                type: Object
+            },
             button: {
                 type: String
-            },
-            position: {
-                type: Object
             }
         },
         data() {
             return {
                 form: {
-                    user_id: {},
-                    position: {}
+                    user_meta: {},
+                    earning_group: {},
+                    rate: 0,
+                    disabled: false
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>

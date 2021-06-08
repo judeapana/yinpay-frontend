@@ -1,20 +1,14 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-        <v-text-field label="First Name"></v-text-field>
-        <v-text-field label="Last Name"></v-text-field>
-        <v-text-field label="Middle Name"></v-text-field>
-        <v-text-field label="Staff ID"></v-text-field>
-        <v-text-field label="Date Of Birth"></v-text-field>
         <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>
-
 <script>
     export default {
-        name: 'UserForm',
+        name: 'TaxForm',
         props: {
-            user: {
+            tax: {
                 type: Object
             },
             button: {
@@ -24,13 +18,15 @@
         data() {
             return {
                 form: {
-
+                    period: {},
+                    personnel_group: {},
+                    name: "",
+                    rate: 0,
+                    disabled: false,
+                    automate: false,
+                    notes: ""
                 }
             }
-        },
+        }
     }
 </script>
-
-<style scoped>
-
-</style>
