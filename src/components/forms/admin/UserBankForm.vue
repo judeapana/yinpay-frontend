@@ -1,6 +1,12 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-                <v-btn v-text="button" type="submit"></v-btn>
+        <v-text-field label="User" v-model="form.user_id"></v-text-field>
+        <v-date-picker label="date" v-model="form.date"></v-date-picker>
+        <v-select :items="form.option" v-model="form.option"></v-select>
+        <v-text-field v-model="form.account_name"></v-text-field>
+        <v-text-field v-model="form.account_no"></v-text-field>
+        <v-switch label="Activate" v-model="form.active"></v-switch>
+        <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>

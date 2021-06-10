@@ -11,12 +11,10 @@
             <v-btn icon>
                 <v-icon>mdi-heart</v-icon>
             </v-btn>
-
-            <v-btn icon>
-                <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+            <AvatarDropdown/>
         </v-app-bar>
 
+        <!--    navigation-->
         <v-navigation-drawer app light v-model="drawer">
             <template v-slot:prepend>
                 <v-list-item two-line>
@@ -24,12 +22,13 @@
                         <img src="https://randomuser.me/api/portraits/women/56.jpg">
                     </v-list-item-avatar>
                     <v-list-item-content>
-                        <v-list-item-title>Business Name</v-list-item-title>
-                        <v-list-item-subtitle>Logged In</v-list-item-subtitle>
+                        <v-skeleton-loader class="mx-auto" max-width="300" type="text@2"
+                                           v-if="!getCurrentBs"></v-skeleton-loader>
+                        <v-list-item-title v-if="getCurrentBs">{{getCurrentBs.name}}</v-list-item-title>
+                        <v-list-item-subtitle v-if="getCurrentBs">{{getCurrentBs.btype}}</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
             </template>
-
 
             <v-list dense rounded>
                 <template v-for="item in items">
@@ -71,18 +70,23 @@
 <script>
     import Footer from "./Footer";
     import {menus} from "../../utils/menu";
+    import AvatarDropdown from "../AvatarDropdown";
+    import {mapGetters} from "vuex";
 
     export default {
         name: 'AppLayout',
-        components: {Footer},
+        components: {Footer, AvatarDropdown},
         data() {
             return {
                 menus,
                 title: 'Dashboard',
                 drawer: true,
-                items: menus
+                items: menus,
             }
         },
+        computed: {
+            ...mapGetters('business', ['getCurrentBs'])
+        }
     }
 </script>
 

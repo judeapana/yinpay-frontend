@@ -92,27 +92,33 @@ export const routes = [
         name: 'admin_index',
         redirect: 'yine/dashboard',
         component: AdminIndex,
+
         children: [
-            {path: 'dashboard', name: 'admin_dashboard', component: AdminDashboard},
-            {path: 'dashboard/payroll', name: 'admin_dashboard_payroll', component: PayrollDashboard},
-            {path: 'dashboard/hrm', name: 'admin_dashboard_hrm', component: HrmDashboard},
-            {path: 'departments', name: 'department', component: Department},
-            {path: 'banks', name: 'bank', component: Bank},
-            {path: 'personnel-group', name: 'personnel-group', component: PersonnelGroup},
-            {path: 'settings', name: 'settings', component: Settings},
-            {path: 'memos', name: 'memo', component: Memo},
+            {path: 'dashboard', name: 'admin_dashboard', component: AdminDashboard, meta: {loginRequired: true},},
+            {
+                path: 'dashboard/payroll',
+                name: 'admin_dashboard_payroll',
+                component: PayrollDashboard,
+                meta: {loginRequired: true},
+            },
+            {path: 'dashboard/hrm', name: 'admin_dashboard_hrm', component: HrmDashboard, meta: {loginRequired: true},},
+            {path: 'departments', name: 'department', component: Department, meta: {loginRequired: true},},
+            {path: 'banks', name: 'bank', component: Bank, meta: {loginRequired: true},},
+            {path: 'personnel-group', name: 'personnel-group', component: PersonnelGroup, meta: {loginRequired: true},},
+            {path: 'settings', name: 'settings', component: Settings, meta: {loginRequired: true},},
+            {path: 'memos', name: 'memo', component: Memo, meta: {loginRequired: true},},
             {
                 path: 'users', name: 'user', component: User, redirect: 'users/all',
                 children: [
-                    {path: 'all', name: 'user-all', component: AllUsers},
-                    {path: 'bank', name: 'user-bank', component: UserBank},
-                    {path: 'tin', name: 'user-tin', component: UserTin},
-                    {path: 'ssn', name: 'user-ssn', component: UserSsn},
-                    {path: 'docs', name: 'user-docs', component: UserDocs},
-                    {path: 'spouse', name: 'user-spouse', component: UserSpouse},
-                    {path: 'next-of-kin', name: 'next-of-kin', component: UserNextOfKin},
-                    {path: 'position', name: 'user-position', component: UserPosition},
-                    {path: 'assoc', name: 'user-assoc', component: UserAssoc},
+                    {path: 'all', name: 'user-all', component: AllUsers, meta: {loginRequired: true},},
+                    {path: 'bank', name: 'user-bank', component: UserBank, meta: {loginRequired: true},},
+                    {path: 'tin', name: 'user-tin', component: UserTin, meta: {loginRequired: true},},
+                    {path: 'ssn', name: 'user-ssn', component: UserSsn, meta: {loginRequired: true},},
+                    {path: 'docs', name: 'user-docs', component: UserDocs, meta: {loginRequired: true},},
+                    {path: 'spouse', name: 'user-spouse', component: UserSpouse, meta: {loginRequired: true},},
+                    {path: 'next-of-kin', name: 'next-of-kin', component: UserNextOfKin, meta: {loginRequired: true},},
+                    {path: 'position', name: 'user-position', component: UserPosition, meta: {loginRequired: true},},
+                    {path: 'assoc', name: 'user-assoc', component: UserAssoc, meta: {loginRequired: true},},
                 ]
             }]
     },
@@ -147,20 +153,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+
     const {loginRequired} = to.meta;
     if (loginRequired && !isAuthenticated()) {
+        Vue.prototype.$message.error('You have to login to access this page')
         return next({name: 'SignIn', query: {return: to.path}})
     }
-    if (loginRequired && isAuthenticated()) {
-        return next({name: 'Unauthorized'})
-    }
-
-    store.dispatch('_loading', true)
+    store.dispatch('app/_loading', true)
     next()
 
 })
+
 router.afterEach(() => {
-    store.dispatch('_loading', false)
+    store.dispatch('app/_loading', false)
 })
 
 export default router

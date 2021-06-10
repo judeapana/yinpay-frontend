@@ -11,19 +11,23 @@ import Antd from 'ant-design-vue';
 import {getToken} from "./utils";
 import store from './store/index'
 import FormMixin from './utils/form.mixin'
+import NProgress from 'vue-nprogress'
 
-Vue.use(Antd);
 
+Vue.use(Antd)
 Vue.config.productionTip = false
 Vue.use(VueWorkers, 'vue-workers')
 Vue.use(VCountryRegionSelect)
 Vue.use(VueAxios)
+Vue.use(NProgress)
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000';
 axios.defaults.headers['Authorization'] = `Bearer ${getToken()}`
 
+const nprogress = new NProgress()
 Vue.mixin(FormMixin)
 new Vue({
+    nprogress,
     router,
     store,
     vuetify,

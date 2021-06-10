@@ -1,7 +1,10 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-        <v-btn v-text="button" type="submit"></v-btn>
-
+        <v-text-field v-model="form.name"></v-text-field>
+        <v-text-field label="Code" v-model="form.code"></v-text-field>
+        <v-textarea label="Description" rows="2" v-model="form.description"></v-textarea>
+        <v-switch label="Activate" v-model="form.active"></v-switch>
+        <v-btn type="submit" v-text="button"></v-btn>
     </v-form>
 </template>
 

@@ -3,7 +3,7 @@
         <v-container>
             <v-row>
                 <v-col class="mx-auto mt-6" cols="12" md="5">
-                    <v-card :loading="getLoading">
+                    <v-card :disabled="getLoading" :loading="getLoading">
                         <v-img
                                 class="white--text align-end"
                                 height="200px"
@@ -39,8 +39,13 @@
             LoginUser(form) {
                 this._auth(form).then(() => {
                     let user = getCurrentUser()
-                    this.$message.loading(`logging you in [${user.username}]`, 3).then(() => {
-                        this.$router.push({name: 'admin_dashboard'})
+                    this.$message.loading(`logging you in [${user.username}]`, 1).then(() => {
+                        let returnEp = this.$route.query?.return || null
+                        if (!returnEp) {
+                            this.$router.push({name: 'admin_dashboard'})
+                        } else {
+                            this.$router.push(returnEp)
+                        }
                     })
                 }).catch(() => {
 

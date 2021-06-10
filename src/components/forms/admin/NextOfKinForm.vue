@@ -1,7 +1,9 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-        <v-btn v-text="button" type="submit"></v-btn>
-
+        <v-text-field label="Full Name" v-model="form.full_name"></v-text-field>
+        <v-date-picker label="Date Of Birth" v-model="form.dob"></v-date-picker>
+        <v-text-field label="Relationship" v-model="form.rel"></v-text-field>
+        <v-btn type="submit" v-text="button"></v-btn>
     </v-form>
 </template>
 
@@ -22,7 +24,6 @@
                     full_name: '',
                     dob: '',
                     rel: '',
-                    image: ''
                 }
             }
         },

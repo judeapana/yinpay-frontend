@@ -13,6 +13,11 @@
 
                 <v-tab-item>
                     <empty class="text-center">
+                        <a-modal :footer="null"
+                               v-model="visible"
+                               title="Create New Personnel Group">
+                            <PersonnelGroupForm button="Create"></PersonnelGroupForm>
+                        </a-modal>
                         <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
                     </empty>
                 </v-tab-item>
@@ -23,10 +28,12 @@
 
 <script>
     import {Empty} from "ant-design-vue";
+    import PersonnelGroupForm from "../../components/forms/admin/PersonnelGroupForm";
 
     export default {
         name: 'PersonnelGroup',
         components: {
+            PersonnelGroupForm,
             Empty
         },
         data() {

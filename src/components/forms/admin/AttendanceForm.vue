@@ -1,6 +1,10 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)">
-
+        <v-text-field label="Allotted Name" v-model="form.name"></v-text-field>
+        <v-date-picker label="Date" v-model="form.day"></v-date-picker>
+        <v-select label="Period" v-model="form.period"></v-select>
+        <v-switch label="Disabled" v-model="form.disabled"></v-switch>
+        <v-textarea label="Notes" v-model="form.notes"></v-textarea>
         <v-btn type="submit" v-text="button"></v-btn>
     </v-form>
 

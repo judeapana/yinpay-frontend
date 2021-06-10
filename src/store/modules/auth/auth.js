@@ -1,33 +1,28 @@
 import axios from "axios";
-import {setToken} from "../../../utils";
+import {logoutUser, setToken} from "../../../utils";
 
 const state = {
     loading: false,
     msg: [],
     errors: [],
+    loggedIn: false,
 }
 
 const getters = {
     getLoading(state) {
         return state.loading
     },
-    getErrors(state) {
-        return state.errors
+    getLoggedIn(state) {
+        return state.loggedIn
     },
-    getMsg(state) {
-        return state.msg
-    }
 }
 
 const mutations = {
     setLoading(state, payload) {
         state.loading = payload
     },
-    setErrors(state, payload) {
-        state.errors = payload
-    },
-    setMsg(state, payload) {
-        state.msg = payload
+    setLoggedIn(state, payload) {
+        state.loggedIn = payload
     }
 }
 
@@ -35,44 +30,46 @@ const actions = {
     // login to yinpay portal
     _auth({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise(((resolve, reject) => {
             axios.post('/auth/', payload).then(({data}) => {
-                commit('setErrors', null)
-                commit('setMsg', {message: 'You have successfully Logged'})
-                commit('setLoading', false)
                 setToken(data)
+                commit('setLoggedIn', true)
+                commit('app/setErrors', null, {root: true})
+                commit('app/setMsg', {message: 'You have successfully Logged'}, {root: true})
+                commit('setLoading', false)
                 resolve(data)
             }).catch((error) => {
-                commit('setMsg', null)
-                commit('setErrors', error.response.data)
+                commit('app/setMsg', null, {root: true})
+                commit('app/setErrors', error.response.data, {root: true})
                 commit('setLoading', false)
                 reject(error.response.data)
             })
         }))
     },
+    //active your account before logging in
     _activate_account({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.put('/auth/activate-account', payload).then(({data}) => {
                 commit('setLoading', false)
-                commit('setErrors', null)
-                commit('setMsg', data)
+                commit('setErrors', null, {root: true})
+                commit('setMsg', data, {root: true})
                 resolve(data)
             }).catch((error) => {
                 commit('setLoading', false)
-                commit('setErrors', error.response.data)
-                commit('setMsg', null)
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('app/setMsg', null, {root: true})
                 reject(error.response.data)
             })
         })))
     },
     _change_email({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
+        commit('app/setErrors', null, {root: true})
         return new Promise((((resolve, reject) => {
             this.$http.post('/auth/change-email', payload).then(({data}) => {
                 resolve(data)
@@ -83,7 +80,7 @@ const actions = {
     },
     _put_change_email({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
+        commit('app/setErrors', null, {root: true})
         return new Promise((((resolve, reject) => {
             this.$http.put('/auth/change-email', payload).then(({data}) => {
                 resolve(data)
@@ -95,18 +92,18 @@ const actions = {
     //request link to reset account password
     _forgot_pwd({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/auth/forgot-pwd', payload).then(({data}) => {
                 commit('setLoading', false)
-                commit('setMsg', data)
-                commit('setErrors', null)
+                commit('app/setMsg', data, {root: true})
+                commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
-                commit('setErrors', error.response.data)
+                commit('app/setErrors', error.response.data, {root: true})
                 commit('setLoading', false)
-                commit('setMsg', null)
+                commit('app/setMsg', null, {root: true})
                 reject(error.response.data)
             })
         })))
@@ -114,39 +111,55 @@ const actions = {
     _logout({commit}, payload) {
         commit('setLoading', true)
         commit('setErrors', null)
+        commit('setMsg', null)
         return new Promise((((resolve, reject) => {
-            this.$http.put('/auth/logout', payload).then(({data}) => {
+            axios.post('/auth/logout', payload).then(({data}) => {
+                commit('setLoggedIn', false)
+                commit('app/setMsg', {message: 'Logged out'}, {root: true})
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                logoutUser()
                 resolve(data)
             }).catch((error) => {
-                reject(error.response)
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                logoutUser()
+                reject(error.response.data)
             })
         })))
     },
     _refresh({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            this.$http.post('/auth/refresh', payload).then(({data}) => {
+            axios.post('/auth/refresh', payload).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
-                reject(error.response)
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
             })
         })))
     },
     //register new user into yinpay
     _register({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/auth/register', payload).then(({data}) => {
                 commit('setLoading', false)
-                commit('setMsg', data)
-                commit('setErrors', null)
+                commit('app/setMsg', data, {root: true})
+                commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
-                commit('setErrors', error.response?.data || null)
-                commit('setMsg', null)
+                commit('app/setErrors', error.response?.data || null, {root: true})
+                commit('app/setMsg', null, {root: true})
                 commit('setLoading', false)
                 reject(error.response?.data || null)
             })
@@ -155,18 +168,18 @@ const actions = {
     //post request to validate token of reset password
     _reset_pwd({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/auth/reset-pwd', payload).then(({data}) => {
-                commit('setErrors', null)
+                commit('app/setErrors', null, {root: true})
                 commit('setLoading', false)
-                commit('setMsg', data)
+                commit('app/setMsg', data, {root: true})
                 resolve(data)
             }).catch((error) => {
-                commit('setMsg', null)
+                commit('app/setMsg', null, {root: true})
                 commit('setLoading', false)
-                commit('setErrors', error.response.data)
+                commit('app/setErrors', error.response.data, {root: true})
                 reject(error.response.data)
             })
         })))
@@ -174,18 +187,18 @@ const actions = {
     //put request to change password of account user
     _put_reset_pwd({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.put('/auth/reset-pwd', payload).then(({data}) => {
-                commit('setMsg', data)
+                commit('app/setMsg', data, {root: true})
                 commit('setLoading', false)
-                commit('setErrors', null)
+                commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
-                commit('setMsg', null)
+                commit('app/setMsg', null, {root: true})
                 commit('setLoading', false)
-                commit('setErrors', error.response.data)
+                commit('app/setErrors', error.response.data, {root: true})
                 reject(error.response.data)
             })
         })))

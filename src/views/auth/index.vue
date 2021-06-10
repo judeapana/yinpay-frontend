@@ -6,7 +6,6 @@
 
 <script>
 
-    import {mapGetters} from "vuex";
     import {getCurrentUser, logoutUser} from "../../utils";
 
     export default {
@@ -32,30 +31,7 @@
 
             }
         },
-        computed: {
-            ...mapGetters('auth', ['getMsg', 'getErrors'])
-        },
-        watch: {
-            getMsg(value) {
-                if (value) {
-                    if (typeof (value.message) === "string")
-                        this.$message.info(value.message, 10);
-                    if (typeof (value.message) === "object") {
-                        value.message.forEach(x => this.$message.info(x, 10))
-                    }
-                }
-            },
-            getErrors(value) {
-                if (value) {
-                    if (typeof (value.message) === "string")
-                        this.$message.error(value.message, 10);
-                    if (typeof (value.message) === "object") {
-                        value.message.forEach(x => this.$message.error(x, 10))
-                    }
-                }
-            }
 
-        }
     }
 </script>
 
