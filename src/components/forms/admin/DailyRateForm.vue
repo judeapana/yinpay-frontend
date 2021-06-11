@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-select label="Period" v-model="form.period"></v-select>
         <v-select label="User" v-model="form.user_meta"></v-select>
         <v-text-field label="Main Amount" type="number" v-model="form.main_amount"></v-text-field>
@@ -13,12 +13,19 @@
 <script>
     export default {
         name: 'DailyRateForm',
-        props: {
+        props: {errors: {
+                type: Object
+            },
             daily_rate: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

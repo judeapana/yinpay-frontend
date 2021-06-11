@@ -13,7 +13,7 @@
 
                 <v-tab-item>
                     <empty class="text-center">
-                        <a-modal :footer="null"
+                        <a-modal @destroyOnClose="true" :footer="null"
                                v-model="visible"
                                title="Create New Personnel Group">
                             <PersonnelGroupForm button="Create"></PersonnelGroupForm>

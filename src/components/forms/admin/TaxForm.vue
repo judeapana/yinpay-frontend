@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-combobox items="" label="Tax Name" v-model="form.name"></v-combobox>
         <v-select label="Period" v-model="form.period"></v-select>
         <v-select label="Personnel Group" v-model="form.personnel_group"/>
@@ -13,12 +13,19 @@
 <script>
     export default {
         name: 'TaxForm',
-        props: {
+        props: {errors: {
+                type: Object
+            },
             tax: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

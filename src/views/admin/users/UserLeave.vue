@@ -1,17 +1,24 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
+
+        <AModal :destroyOnClose="true" :footer="null" title="Leaves" v-model="visible" width="900px">
+            <UserLeaveForm button="Create"></UserLeaveForm>
+        </AModal>
     </div>
 </template>
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import 'ant-design-vue/dist/antd.css';
+    import UserLeaveForm from "../../../components/forms/admin/UserLeaveForm";
 
     export default {
-        name: 'UserPosition',
+        name: 'UserLeave',
         components: {
+            UserLeaveForm,
             Empty
         },
         data() {

@@ -39,6 +39,7 @@ const mutations = {
 const actions = {
     setBusiness({commit}, payload) {
         commit('setCurrentBs', payload)
+        commit('app/setMsg', {message: `Your Business Account has been Changed to ${payload.name}`}, {root: true})
     },
     _getBusiness({commit}, payload) {
         commit('setLoading', true)

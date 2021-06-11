@@ -1,34 +1,38 @@
 <template>
     <div>
         <v-card>
-            <v-toolbar elevation="0">
-                <v-toolbar-title>Departments</v-toolbar-title>
+            <v-toolbar dark elevation="0">
+                <v-toolbar-title>
+                    Your Businesses
+                </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
                 <v-tab>All</v-tab>
+                <v-tab>Primary</v-tab>
+
                 <v-tab-item>
                     <empty class="text-center">
-                        <AModal @destroyOnClose="true" v-model="visible" :footer="null" title="New Department">
-                            <DepartmentForm button="Create"></DepartmentForm>
-                        </AModal>
+                        <a-modal @destroyOnClose="true" :footer="null"
+                               v-model="visible"
+                               title="Create New Personnel Group">
+                            <SocialSecurityRateForm button="Create"></SocialSecurityRateForm>
+                        </a-modal>
                         <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
                     </empty>
                 </v-tab-item>
             </v-tabs>
-
         </v-card>
-
     </div>
 </template>
 
 <script>
     import {Empty} from "ant-design-vue";
-    import DepartmentForm from "../../components/forms/admin/DepartmentForm";
+    import SocialSecurityRateForm from "../../components/forms/admin/SocialSecurityRateForm";
 
     export default {
-        name: 'Department',
+        name: 'SSR',
         components: {
-            DepartmentForm,
+            SocialSecurityRateForm,
             Empty
         },
         data() {

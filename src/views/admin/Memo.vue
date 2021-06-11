@@ -10,6 +10,9 @@
 
             <v-tab-item>
                 <empty class="text-center">
+                    <AModal @destroyOnClose="true" :footer="null" title="New Memo" v-model="visible">
+                        <MemoForm button="Create"></MemoForm>
+                    </AModal>
                     <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
                 </empty>
             </v-tab-item>
@@ -22,10 +25,12 @@
 
 <script>
     import {Empty} from "ant-design-vue";
+    import MemoForm from "../../components/forms/admin/MemoForm";
 
     export default {
         name: 'Memo',
         components: {
+            MemoForm,
             Empty
         },
         data() {

@@ -20,7 +20,7 @@
                         <p class="text-caption mt-1">
                             {{ user.email }}
                         </p>
-                        <v-btn color="grey" depressed outlined rounded small text>
+                        <v-btn :to="{name:'settings'}" color="grey" depressed outlined rounded small text>
                             <small class="text-sm-center text--darken-1 text-capitalize">
                                 Manage your YinPay Account
                             </small>

@@ -1,19 +1,22 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <AModal :footer="null" title="User Upload Documents" v-model="visible">
+                <UserDocForm button="Upload"></UserDocForm>
+            </AModal>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
-
-
     </div>
 </template>
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import UserDocForm from "../../../components/forms/admin/UserDocForm";
 
     export default {
         name: 'UserDocs',
         components: {
+            UserDocForm,
             Empty
         },
         data() {

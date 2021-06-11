@@ -13,28 +13,26 @@
                 <v-tab>Primary</v-tab>
                 <v-tab-item>
                     <empty class="text-center">
+                        <AModal @destroyOnClose="true" :footer="null" title="Create Bank Information" v-model="visible">
+                            <BankForm button="Create"></BankForm>
+                        </AModal>
                         <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
                     </empty>
                 </v-tab-item>
-            </v-tabs>
 
+            </v-tabs>
         </v-card>
-        <FormDrawer :visible="visible" title="Bank" v-on:onClose="onClose">
-            <BankForm button="Create"></BankForm>
-        </FormDrawer>
     </div>
 </template>
 
 <script>
     import {Empty} from "ant-design-vue";
-    import FormDrawer from "../../components/drawer/FormDrawer";
     import BankForm from "../../components/forms/admin/BankForm";
 
     export default {
         name: 'Bank',
         components: {
-            BankForm,
-            FormDrawer, Empty
+            BankForm, Empty
         },
         data() {
             return {

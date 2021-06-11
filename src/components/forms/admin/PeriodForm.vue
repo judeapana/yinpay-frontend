@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-text-field label="Period Tag" v-model="form.name"></v-text-field>
         <v-date-picker label="Month" v-model="form.month"></v-date-picker>
         <v-switch label="Issue Payment" v-model="form.make_payment"></v-switch>
@@ -11,12 +11,19 @@
 <script>
     export default {
         name: 'PeriodForm',
-        props: {
+        props: {errors: {
+                type: Object
+            },
             period: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

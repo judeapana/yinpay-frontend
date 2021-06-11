@@ -1,7 +1,10 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <AModal :footer="null" title="Add User Bank Account" v-model="visible">
+                <UserBankForm button="Add Account"></UserBankForm>
+            </AModal>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
 
     </div>
@@ -9,10 +12,12 @@
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import UserBankForm from "../../../components/forms/admin/UserBankForm";
 
     export default {
         name: 'UserBank',
         components: {
+            UserBankForm,
             Empty
         },
         data() {

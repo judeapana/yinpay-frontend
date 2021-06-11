@@ -1,5 +1,5 @@
 <template>
-    <v-form>
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <!--        General Settings-->
         <v-text-field v-model="form.company_name"></v-text-field>
         <v-text-field v-model="form.company_email"></v-text-field>
@@ -15,14 +15,24 @@
         <v-text-field v-model="form.send_payslip"></v-text-field>
         <v-text-field v-model="form.enable_otp_verification"></v-text-field>
         <v-text-field v-model="form.provide_user_portal"></v-text-field>
-                <v-btn v-text="button" type="submit"></v-btn>
+        <v-btn type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>
 
 <script>
     export default {
+        props: {
+            errors: {
+                type: Object
+            },
+        },
         name: 'Settings',
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
+            }
+        },
         data() {
             return {
                 form: {

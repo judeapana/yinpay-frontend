@@ -1,19 +1,24 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
 
-
+        <AModal :destroyOnClose="true" :footer="null" title="Attendance" v-model="visible" width="900px">
+            <UserAttendanceForm button="Create"></UserAttendanceForm>
+        </AModal>
     </div>
 </template>
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import 'ant-design-vue/dist/antd.css';
+    import UserAttendanceForm from "../../../components/forms/admin/UserAttendanceForm";
 
     export default {
-        name: 'UserAssoc',
+        name: 'UserAttendance',
         components: {
+            UserAttendanceForm,
             Empty
         },
         data() {

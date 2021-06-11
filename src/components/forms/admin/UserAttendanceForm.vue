@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-select items="" label="User" v-model="form.user_meta"/>
         <v-select items="" label="Attendance" v-model="form.attendance"/>
         <v-select :items="['Absent', 'Excused Duty', 'Present']" label="Attendance Type"
@@ -12,12 +12,19 @@
 <script>
     export default {
         name: 'UserAttendanceForm',
-        props: {
+        props: {errors: {
+                type: Object
+            },
             attendance: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

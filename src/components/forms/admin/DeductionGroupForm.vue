@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-text-field v-model="form.name"></v-text-field>
         <v-select v-model="form.personnel_group"></v-select>
         <v-text-field type="number" v-model="form.amount"></v-text-field>
@@ -12,11 +12,19 @@
     export default {
         name: 'DeductionGroupForm',
         props: {
+            errors: {
+                type: Object
+            },
             deduction: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

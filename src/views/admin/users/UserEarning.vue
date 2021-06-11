@@ -1,19 +1,24 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
 
-
+        <AModal :destroyOnClose="true" :footer="null" title="Earnings" v-model="visible" width="900px">
+            <UserEarningForm button="Create"></UserEarningForm>
+        </AModal>
     </div>
 </template>
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import 'ant-design-vue/dist/antd.css';
+    import UserEarningForm from "../../../components/forms/admin/UserEarningForm";
 
     export default {
-        name: 'UserSpouse',
+        name: 'UserEarning',
         components: {
+            UserEarningForm,
             Empty
         },
         data() {
@@ -44,4 +49,3 @@
 <style scoped>
 
 </style>
-

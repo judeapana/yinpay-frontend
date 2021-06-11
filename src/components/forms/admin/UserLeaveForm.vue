@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit="$emit('on-submit',form)">
+    <v-form @submit="$emit('on-submit',form)" ref="form">
         <v-select label="User" v-model="form.user_id"></v-select>
         <v-switch label="Without Payment" v-model="form.without_pay"></v-switch>
         <v-select label="Type Of Leave" v-model="form.ltype"></v-select>
@@ -12,13 +12,20 @@
 
 <script>
     export default {
-        name: 'UserLeave',
-        props: {
+        name: 'UserLeaveForm',
+        props: {errors: {
+                type: Object
+            },
             button: {
                 type: String
             },
             leave: {
                 type: Object
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

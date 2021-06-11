@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-text-field label="Name Of Bank" v-model="form.bank_name"></v-text-field>
         <v-text-field label="Account Name" v-model="form.account_name"></v-text-field>
         <v-text-field label="Account Code" v-model="form.code"></v-text-field>
@@ -14,11 +14,19 @@
     export default {
         name: 'BankForm',
         props: {
+            errors: {
+                type: Object
+            },
             bank: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

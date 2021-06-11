@@ -1,7 +1,10 @@
 <template>
     <div>
         <empty class="text-center">
-            <v-btn color="primary" @click="showDrawer">Create Now</v-btn>
+            <AModal title="Next Of Kin" :footer="null" v-model="visible">
+                <NextOfKinForm button="Add"></NextOfKinForm>
+            </AModal>
+            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
         </empty>
 
 
@@ -10,10 +13,12 @@
 
 <script>
     import {Empty} from 'ant-design-vue'
+    import NextOfKinForm from "../../../components/forms/admin/NextOfKinForm";
 
     export default {
         name: 'UserDocs',
         components: {
+            NextOfKinForm,
             Empty
         },
         data() {

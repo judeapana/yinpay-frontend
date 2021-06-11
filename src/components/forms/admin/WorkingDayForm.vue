@@ -1,5 +1,5 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)">
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
         <v-text-field label="Period" v-model="form.period"></v-text-field>
         <v-text-field label="Personnel Group" v-model="form.personnel_group"></v-text-field>
         <v-text-field label="Days" type="number" v-model="form.days"></v-text-field>
@@ -13,11 +13,19 @@
     export default {
         name: 'WorkingDayForm',
         props: {
+            errors: {
+                type: Object
+            },
             days: {
                 type: Object
             },
             button: {
                 type: String
+            }
+        },
+        watch: {
+            errors(value) {
+                this.validate(this.$refs.form, value.errors)
             }
         },
         data() {

@@ -24,16 +24,24 @@ import Memo from "../views/admin/Memo";
 import User from "../views/admin/users/User";
 import UserBank from "../views/admin/users/UserBank";
 import AllUsers from "../views/admin/users/AllUsers";
-import UserTin from "../views/admin/users/UserTin";
-import UserSsn from "../views/admin/users/UserSsn";
 import UserDocs from "../views/admin/users/UserDocs";
-import UserSpouse from "../views/admin/users/UserSpouse";
-import UserPosition from "../views/admin/users/UserPosition";
-import UserAssoc from "../views/admin/users/UserAssoc";
 import UserNextOfKin from "../views/admin/users/UserNextOfKin";
 import Settings from "../views/admin/Settings";
 import {isAuthenticated} from "../utils";
 import store from '../store/index'
+import Attendance from "../views/admin/Attendance";
+import Business from "../views/admin/Business";
+import BusinessAccount from "../views/admin/BusinessAccount";
+import DeductionGroup from "../views/admin/DeductionGroup";
+import EarningGroup from "../views/admin/EarningGroup";
+import Period from "../views/admin/Period";
+import SSR from "../views/admin/SSR";
+import Tax from "../views/admin/Tax";
+import WorkingDay from "../views/admin/WorkingDay";
+import UserEarning from "../views/admin/users/UserEarning";
+import UserAttendance from "../views/admin/users/UserAttendance";
+import UserDeduction from "../views/admin/users/UserDeduction";
+import UserLeave from "../views/admin/users/UserLeave";
 
 Vue.use(VueRouter)
 
@@ -112,15 +120,31 @@ export const routes = [
                 children: [
                     {path: 'all', name: 'user-all', component: AllUsers, meta: {loginRequired: true},},
                     {path: 'bank', name: 'user-bank', component: UserBank, meta: {loginRequired: true},},
-                    {path: 'tin', name: 'user-tin', component: UserTin, meta: {loginRequired: true},},
-                    {path: 'ssn', name: 'user-ssn', component: UserSsn, meta: {loginRequired: true},},
                     {path: 'docs', name: 'user-docs', component: UserDocs, meta: {loginRequired: true},},
-                    {path: 'spouse', name: 'user-spouse', component: UserSpouse, meta: {loginRequired: true},},
                     {path: 'next-of-kin', name: 'next-of-kin', component: UserNextOfKin, meta: {loginRequired: true},},
-                    {path: 'position', name: 'user-position', component: UserPosition, meta: {loginRequired: true},},
-                    {path: 'assoc', name: 'user-assoc', component: UserAssoc, meta: {loginRequired: true},},
+                    //new
+                    {path: 'earnings', name: 'earnings', component: UserEarning, meta: {loginRequired: true},},
+                    {path: 'attendance', name: 'attendance', component: UserAttendance, meta: {loginRequired: true},},
+                    {path: 'deductions', name: 'deductions', component: UserDeduction, meta: {loginRequired: true},},
+                    {path: 'leaves', name: 'leaves', component: UserLeave, meta: {loginRequired: true},},
                 ]
-            }]
+            },
+            //new
+            {path: 'attendance', name: 'attendance', component: Attendance, meta: {loginRequired: true},},
+            {path: 'business', name: 'business', component: Business, meta: {loginRequired: true},},
+            {
+                path: 'business-accounts',
+                name: 'business-accounts',
+                component: BusinessAccount,
+                meta: {loginRequired: true},
+            },
+            {path: 'deduction-group', name: 'deduction-group', component: DeductionGroup, meta: {loginRequired: true},},
+            {path: 'earning-group', name: 'earning-group', component: EarningGroup, meta: {loginRequired: true},},
+            {path: 'period', name: 'period', component: Period, meta: {loginRequired: true},},
+            {path: 'ssr', name: 'ssr', component: SSR, meta: {loginRequired: true},},
+            {path: 'tax', name: 'tax', component: Tax, meta: {loginRequired: true},},
+            {path: 'working-days', name: 'working-days', component: WorkingDay, meta: {loginRequired: true},},
+        ]
     },
     {
         path: '*',
