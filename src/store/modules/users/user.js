@@ -3,14 +3,17 @@ import axios from "axios";
 const state = {
     loading: false,
     errors: null,
-    departments:null
+    users: null
 }
 const getters = {
     getLoading(state) {
         return state.loading
     },
-    getDepartments(state) {
-        return state.departments
+    getErrors(state) {
+        return state.errors
+    },
+    getUsers(state) {
+        return state.users
     }
 }
 
@@ -20,35 +23,21 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setUsers(state, payload) {
+        state.users = payload
     }
 }
 
 const actions = {
-    _get_department({commit}, payload) {
+    _get_user({commit}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.get('/department/', {params: payload}).then(({data}) => {
+            axios.get('/users/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
-                commit('app/setErrors', null, {root: true})
-                resolve(data)
-            }).catch((error) => {
-                commit('app/setErrors', error.response.data, {root: true})
-                commit('setLoading', false)
-                commit('app/setMsg', null, {root: true})
-                reject(error.response.data)
-            })
-        })))
-
-    },
-    _post_department({commit}, payload) {
-        commit('setLoading', true)
-        commit('app/setErrors', null, {root: true})
-        commit('app/setMsg', null, {root: true})
-        return new Promise((((resolve, reject) => {
-            axios.post('/department/', payload).then(({data}) => {
-                commit('setLoading', false)
+                commit('setUsers', data)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -59,13 +48,14 @@ const actions = {
             })
         })))
     },
-    _put_department({commit}, payload) {
+    _post_user({commit}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/department/', payload).then(({data}) => {
+            axios.post('/users/', payload).then(({data}) => {
                 commit('setLoading', false)
+                commit('setUsers', data)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -76,13 +66,32 @@ const actions = {
             })
         })))
     },
-    _delete_department({commit}, payload) {
+    _put_user({commit}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/department/', payload).then(({data}) => {
+            axios.put('/users/', payload).then(({data}) => {
                 commit('setLoading', false)
+                commit('setUsers', data)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
+    },
+    _delete_user({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.delete('/users/', payload).then(({data}) => {
+                commit('setLoading', false)
+                commit('setUsers', data)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -93,8 +102,6 @@ const actions = {
             })
         })))
     }
-
-
 }
 
 export default {

@@ -1,12 +1,12 @@
 <template>
-    <Drawer
-            :body-style="{paddingBottom: '80px'}"
+    <Drawer :body-style="{paddingBottom: '80px'}"
             :closable="closable"
             :height="600"
             :placement="position"
             :title="title"
             :visible="visible"
-            @close="$emit('onClose')">
+            @close="$emit('onClose')"
+            v-model="model">
         <slot></slot>
     </Drawer>
 </template>
@@ -15,7 +15,11 @@
     import {Drawer} from "ant-design-vue";
 
     export default {
-
+        watch: {
+            visible(value) {
+                this.model = value
+            }
+        },
         props: {
             position: {
                 type: String,
@@ -34,7 +38,12 @@
             }
         },
         name: 'FormDrawer',
-        components: {Drawer}
+        components: {Drawer},
+        data() {
+            return {
+                model: false
+            }
+        }
     }
 </script>
 

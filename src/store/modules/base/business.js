@@ -37,9 +37,10 @@ const mutations = {
 }
 
 const actions = {
-    setBusiness({commit}, payload) {
+    setBusiness({commit, dispatch}, payload) {
         commit('setCurrentBs', payload)
         commit('app/setMsg', {message: `Your Business Account has been Changed to ${payload.name}`}, {root: true})
+        dispatch('user/_get_user', {}, {root: true})
     },
     _getBusiness({commit}, payload) {
         commit('setLoading', true)
@@ -87,6 +88,25 @@ const actions = {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 commit('setMsg', {message: 'Business has been updated'})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
+    },
+    _deleteBusiness({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.delete('/business/', payload).then(({data}) => {
+                commit('app/setMsg', data, {root: true})
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                commit('setMsg', {message: 'Business has been deleted'})
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

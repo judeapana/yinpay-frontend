@@ -46,6 +46,7 @@ export const logoutUser = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('access_token')
+    store.commit('auth/setLoggedIn', false)
     localStorage.clear()
 }
 
@@ -91,6 +92,11 @@ axios.interceptors.response.use(response => {
 // }
 
 
+axios.interceptors.request.use((config) => {
 
+    if (store.state.auth.loggedIn)
+        config.params = {...config.params, 'selector': store.state.business.currentBs.id}
+    return config
+})
 
 

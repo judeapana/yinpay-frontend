@@ -2,7 +2,11 @@ const state = {
     loading: false,
     errors: null
 }
-const getters = {}
+const getters = {
+    getLoading(state) {
+        return state.loading
+    },
+}
 
 const mutations = {
     setLoading(state, payload) {

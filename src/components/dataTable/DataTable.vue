@@ -1,17 +1,16 @@
 <template>
-    <v-data-table :items-per-page="perpage" :options.sync="options"
+    <v-data-table :headers="headers" :items="data.data"
+                  :items-per-page="data.pagination.size"
                   :loading="loading"
-                  :server-items-length="total"
-                  :headers="headers"
-                  :items="data" class="elevation-1">
-
+                  :options.sync="options"
+                  :server-items-length="data.pagination.totalElements" class="elevation-1">
         <template v-slot:item.actions="{ item }">
-            <v-btn @click="$emit('on-edit',item.id)" outlined color="indigo" depressed
-                   x-small fab
-                   class="mr-2">
-                <v-icon small class="">mdi-pencil</v-icon>
+            <v-btn @click="$emit('on-edit',item.id)" class="mr-2" color="indigo" depressed
+                   fab outlined
+                   x-small>
+                <v-icon class="" small>mdi-pencil</v-icon>
             </v-btn>
-            <v-btn x-small depressed color="red" outlined fab>
+            <v-btn color="red" depressed fab outlined x-small>
                 <v-icon @click="$emit('on-delete',item.id)" small>mdi-delete</v-icon>
             </v-btn>
         </template>
@@ -21,35 +20,36 @@
 <script>
     export default {
         props: {
+            handler: {
+                type: Function
+            },
             headers: {
-                type: Object
+                type: Array
             },
             data: {
-                type: Object,
-                default: () => {
-                    return {}
-                }
-            },
-            total: {
-                type: Number,
-                default: 0
-            },
-            perpage: {
-                type: Number,
-                default: 0
-            },
-            options: {
                 type: Object
             },
             loading: {
                 type: Boolean,
                 default: false
             }
-
+        },
+        watch: {
+            options: {
+                handler() {
+                    this.handler({page: this.options.page, size: this.options.itemsPerPage})
+                },
+                deep: true,
+            },
         },
         name: 'DataTable',
+        mounted() {
+            this.handler()
+        },
         data() {
-            return {}
+            return {
+                options: {}
+            }
         },
     }
 </script>
