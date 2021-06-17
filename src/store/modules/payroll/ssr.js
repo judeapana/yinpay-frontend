@@ -20,6 +20,9 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setSsr(state, payload) {
+        state.ssr = payload
     }
 }
 
@@ -32,6 +35,7 @@ const actions = {
             axios.get('/ssr/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setSsr', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

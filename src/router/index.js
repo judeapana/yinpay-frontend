@@ -42,6 +42,7 @@ import UserEarning from "../views/admin/users/UserEarning";
 import UserAttendance from "../views/admin/users/UserAttendance";
 import UserDeduction from "../views/admin/users/UserDeduction";
 import UserLeave from "../views/admin/users/UserLeave";
+import UserDailyRate from "../views/admin/users/UserDailyRate";
 
 Vue.use(VueRouter)
 
@@ -123,8 +124,9 @@ export const routes = [
                     {path: 'docs', name: 'user-docs', component: UserDocs, meta: {loginRequired: true},},
                     {path: 'next-of-kin', name: 'next-of-kin', component: UserNextOfKin, meta: {loginRequired: true},},
                     //new
+                    {path: 'daily-rate', name: 'daily_rate', component: UserDailyRate, meta: {loginRequired: true},},
                     {path: 'earnings', name: 'earnings', component: UserEarning, meta: {loginRequired: true},},
-                    {path: 'attendance', name: 'attendance', component: UserAttendance, meta: {loginRequired: true},},
+                    {path: 'attendance', name: 'user_attendance', component: UserAttendance, meta: {loginRequired: true},},
                     {path: 'deductions', name: 'deductions', component: UserDeduction, meta: {loginRequired: true},},
                     {path: 'leaves', name: 'leaves', component: UserLeave, meta: {loginRequired: true},},
                 ]

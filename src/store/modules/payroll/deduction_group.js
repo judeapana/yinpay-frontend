@@ -20,6 +20,9 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setDg(state, payload) {
+        state.dg = payload
     }
 }
 
@@ -32,6 +35,7 @@ const actions = {
             axios.get('/deduction-group/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setDg', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

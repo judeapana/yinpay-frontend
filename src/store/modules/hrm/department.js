@@ -3,7 +3,7 @@ import axios from "axios";
 const state = {
     loading: false,
     errors: null,
-    departments:null
+    departments: null
 }
 const getters = {
     getLoading(state) {
@@ -20,6 +20,9 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setDep(state, payload) {
+        return state.departments = payload
     }
 }
 
@@ -32,6 +35,7 @@ const actions = {
             axios.get('/department/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setDep', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

@@ -20,6 +20,9 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setWorkingDays(state, payload) {
+        state.working_days = payload
     }
 }
 
@@ -29,9 +32,10 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.get('/working-days/', {params: payload}).then(({data}) => {
+            axios.get('/working-day/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setWorkingDays', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -46,7 +50,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.post('/working-days/', payload).then(({data}) => {
+            axios.post('/working-day/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -63,7 +67,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/working-days/', payload).then(({data}) => {
+            axios.put('/working-day/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -80,7 +84,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/working-days/', payload).then(({data}) => {
+            axios.delete('/working-day/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)

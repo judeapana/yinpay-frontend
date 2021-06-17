@@ -22,7 +22,7 @@ const mutations = {
         state.errors = payload
     },
     setBa(state, payload) {
-        state.errors = payload
+        state.ba = payload
     }
 }
 
@@ -32,9 +32,10 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.get('/business-account/', {params: payload}).then(({data}) => {
+            axios.get('/ba/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setBa', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -49,7 +50,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.post('/business-account/', {params: payload}).then(({data}) => {
+            axios.post('/ba/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -62,10 +63,38 @@ const actions = {
         })))
     },
     _put_business_account({commit}, payload) {
-
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.put('/ba/', payload).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
     },
     _delete_business_account({commit}, payload) {
-
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.delete('/ba/', payload).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
     }
 }
 

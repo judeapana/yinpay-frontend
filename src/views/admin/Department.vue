@@ -7,12 +7,27 @@
             <v-tabs>
                 <v-tab>All</v-tab>
                 <v-tab-item>
-                    <empty class="text-center">
-                        <AModal @destroyOnClose="true" v-model="visible" :footer="null" title="New Department">
-                            <DepartmentForm button="Create"></DepartmentForm>
-                        </AModal>
-                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
-                    </empty>
+                    <!--                    <empty class="text-center">-->
+                    <!--                        <AModal @destroyOnClose="true" v-model="visible" :footer="null" title="New Department">-->
+                    <!--                            <DepartmentForm button="Create"></DepartmentForm>-->
+                    <!--                        </AModal>-->
+                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
+                    <!--                    </empty>-->
+                    <v-row>
+                        <v-col cols="12" md="12">
+                            <v-col cols="12" md="12">
+                                <v-card elevation="2">
+                                    <v-card-title>Department</v-card-title>
+                                    <v-card-actions>
+                                        <v-btn @click="showDrawer">Add Department</v-btn>
+                                    </v-card-actions>
+                                    <v-card-subtitle></v-card-subtitle>
+                                    <DataTable :data="getDepartments" :handler="_get_department" :headers="headers"
+                                               :loading="getLoading"></DataTable>
+                                </v-card>
+                            </v-col>
+                        </v-col>
+                    </v-row>
                 </v-tab-item>
             </v-tabs>
 
@@ -22,21 +37,28 @@
 </template>
 
 <script>
-    import {Empty} from "ant-design-vue";
-    import DepartmentForm from "../../components/forms/admin/DepartmentForm";
+
+    import DataTable from "../../components/dataTable/DataTable";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: 'Department',
         components: {
-            DepartmentForm,
-            Empty
+            // DepartmentForm,
+            // Empty
+            DataTable
         },
         data() {
             return {
                 visible: false,
+                headers: []
             }
         },
+        computed: {
+            ...mapGetters('department', ['getLoading', 'getDepartments']),
+        },
         methods: {
+            ...mapActions('department', ['_get_department']),
             OnUpdate(pk) {
                 console.log(pk)
             },

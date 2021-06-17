@@ -12,7 +12,7 @@ const getters = {
     },
     getLoading(state) {
         return state.loading
-    }
+    },
 }
 
 const mutations = {
@@ -36,6 +36,7 @@ const actions = {
             axios.get('/attendance/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setUserAttendance', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

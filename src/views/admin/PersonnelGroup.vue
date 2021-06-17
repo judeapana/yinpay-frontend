@@ -12,14 +12,28 @@
                 <v-tab>Inactive</v-tab>
 
                 <v-tab-item>
-                    <empty class="text-center">
-                        <a-modal @destroyOnClose="true" :footer="null"
-                               v-model="visible"
-                               title="Create New Personnel Group">
-                            <PersonnelGroupForm button="Create"></PersonnelGroupForm>
-                        </a-modal>
-                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
-                    </empty>
+                    <!--                    <empty class="text-center">-->
+                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
+                    <!--                               v-model="visible"-->
+                    <!--                               title="Create New Personnel Group">-->
+                    <!--                            <PersonnelGroupForm button="Create"></PersonnelGroupForm>-->
+                    <!--                        </a-modal>-->
+                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
+                    <!--                    </empty>-->
+                    <v-row>
+                        <v-col cols="12" md="12">
+                            <v-col cols="12" md="12">
+                                <v-card elevation="2">
+                                    <v-card-actions>
+                                        <v-btn @click="showDrawer">Add Period</v-btn>
+                                    </v-card-actions>
+                                    <v-card-subtitle></v-card-subtitle>
+                                    <DataTable :data="getPg" :handler="_get_personnel_group" :headers="headers"
+                                               :loading="getLoading"></DataTable>
+                                </v-card>
+                            </v-col>
+                        </v-col>
+                    </v-row>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -27,21 +41,27 @@
 </template>
 
 <script>
-    import {Empty} from "ant-design-vue";
-    import PersonnelGroupForm from "../../components/forms/admin/PersonnelGroupForm";
+    import DataTable from "../../components/dataTable/DataTable";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: 'PersonnelGroup',
         components: {
-            PersonnelGroupForm,
-            Empty
+            // PersonnelGroupForm,
+            // Empty
+            DataTable
         },
         data() {
             return {
                 visible: false,
+                headers: []
             }
         },
+        computed: {
+            ...mapGetters('personnel_group', ['getLoading', 'getPg']),
+        },
         methods: {
+            ...mapActions('personnel_group', ['_get_personnel_group']),
             OnUpdate(pk) {
                 console.log(pk)
             },

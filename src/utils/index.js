@@ -93,8 +93,7 @@ axios.interceptors.response.use(response => {
 
 
 axios.interceptors.request.use((config) => {
-
-    if (store.state.auth.loggedIn)
+    if (isAuthenticated)
         config.params = {...config.params, 'selector': store.state.business.currentBs.id}
     return config
 })

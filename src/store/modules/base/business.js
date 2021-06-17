@@ -5,6 +5,7 @@ const state = {
     errors: null,
     msg: null,
     currentBs: null,
+    bs: null
 }
 const getters = {
     getLoading(state) {
@@ -18,6 +19,9 @@ const getters = {
     },
     getCurrentBs(state) {
         return state.currentBs
+    },
+    getBs(state) {
+        return state.bs
     }
 }
 
@@ -33,6 +37,9 @@ const mutations = {
     },
     setCurrentBs(state, payload) {
         state.currentBs = payload
+    },
+    setBs(state, payload) {
+        state.bs = payload
     }
 }
 
@@ -50,12 +57,13 @@ const actions = {
             axios.get('/business/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setBs', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
                 commit('setLoading', false)
                 commit('app/setMsg', null, {root: true})
-                reject(error.response)
+                reject(error.response.data)
             })
         })))
     },

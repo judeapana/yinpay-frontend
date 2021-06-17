@@ -28,9 +28,9 @@
                     {icon: 'mdi-account', name: 'user-bank', title: 'Bank'},
                     {icon: 'mdi-account', name: 'user-docs', title: 'Docs'},
                     {icon: 'mdi-account', name: 'next-of-kin', title: 'Next-Of-Kin'},
-
+                    {icon: 'mdi-account', name: 'daily_rate', title: 'Daily Rate'},
                     {icon: 'mdi-account', name: 'earnings', title: 'Earnings'},
-                    {icon: 'mdi-account', name: 'attendance', title: 'Attendance'},
+                    {icon: 'mdi-account', name: 'user_attendance', title: 'Attendance'},
                     {icon: 'mdi-account', name: 'deductions', title: 'Deduction'},
                     {icon: 'mdi-account', name: 'leaves', title: 'Leaves'},
                 ]

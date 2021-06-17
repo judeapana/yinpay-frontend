@@ -3,7 +3,7 @@
         <v-card>
             <v-toolbar dark elevation="0">
                 <v-toolbar-title>
-                    Your Businesses
+                    Taxes
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
@@ -11,14 +11,28 @@
                 <v-tab>Primary</v-tab>
 
                 <v-tab-item>
-                    <empty class="text-center">
-                        <a-modal @destroyOnClose="true" :footer="null"
-                                 title="Create New Personnel Group"
-                                 v-model="visible">
-                            <TaxForm button="Create"></TaxForm>
-                        </a-modal>
-                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
-                    </empty>
+                    <!--                    <empty class="text-center">-->
+                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
+                    <!--                                 title="Create New Personnel Group"-->
+                    <!--                                 v-model="visible">-->
+                    <!--                            <TaxForm button="Create"></TaxForm>-->
+                    <!--                        </a-modal>-->
+                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
+                    <!--                    </empty>-->
+                    <v-row>
+                        <v-col cols="12" md="12">
+                            <v-col cols="12" md="12">
+                                <v-card elevation="2">
+                                    <v-card-actions>
+                                        <v-btn @click="showDrawer">Add SSR</v-btn>
+                                    </v-card-actions>
+                                    <v-card-subtitle></v-card-subtitle>
+                                    <DataTable :data="getTax" :handler="_get_tax" :headers="headers"
+                                               :loading="getLoading"></DataTable>
+                                </v-card>
+                            </v-col>
+                        </v-col>
+                    </v-row>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -26,21 +40,27 @@
 </template>
 
 <script>
-    import {Empty} from "ant-design-vue";
-    import TaxForm from "../../components/forms/admin/TaxForm";
+    import DataTable from "../../components/dataTable/DataTable";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: 'Business',
         components: {
-            TaxForm,
-            Empty
+            // TaxForm,
+            // Empty
+            DataTable
         },
         data() {
             return {
                 visible: false,
+                headers: []
             }
         },
+        computed: {
+            ...mapGetters('tax', ['getLoading', 'getTax']),
+        },
         methods: {
+            ...mapActions('tax', ['_get_tax']),
             OnUpdate(pk) {
                 console.log(pk)
             },

@@ -20,6 +20,9 @@ const mutations = {
     },
     setErrors(state, payload) {
         state.errors = payload
+    },
+    setDocs(state, payload) {
+        state.docs = payload
     }
 }
 
@@ -29,9 +32,10 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.get('/user-docs/', {params: payload}).then(({data}) => {
+            axios.get('/user-doc/', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('setDocs', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -46,7 +50,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.post('/user-docs/', payload).then(({data}) => {
+            axios.post('/user-doc/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -63,7 +67,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/user-docs/', payload).then(({data}) => {
+            axios.put('/user-doc/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -80,7 +84,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/user-docs/', payload).then(({data}) => {
+            axios.delete('/user-doc/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)

@@ -12,14 +12,29 @@
                 <v-tab>Inactive</v-tab>
 
                 <v-tab-item>
-                    <empty class="text-center">
-                        <a-modal @destroyOnClose="true" :footer="null"
-                                 title="Create New Personnel Group"
-                                 v-model="visible">
-                            <AttendanceForm button="Add"></AttendanceForm>
-                        </a-modal>
-                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
-                    </empty>
+                    <!--                    <empty class="text-center">-->
+                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
+                    <!--                                 title="Create New Personnel Group"-->
+                    <!--                                 v-model="visible">-->
+                    <!--                            <AttendanceForm button="Add"></AttendanceForm>-->
+                    <!--                        </a-modal>-->
+                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
+                    <!--                    </empty>-->
+
+                    <v-row>
+                        <v-col cols="12" md="12">
+                            <v-col cols="12" md="12">
+                                <v-card elevation="1">
+                                    <v-card-actions>
+                                        <v-btn @click="showDrawer">Add Leave</v-btn>
+                                    </v-card-actions>
+                                    <v-card-subtitle></v-card-subtitle>
+                                    <DataTable :data="getUserAttendance" :handler="_get_attendance" :headers="headers"
+                                               :loading="getLoading"></DataTable>
+                                </v-card>
+                            </v-col>
+                        </v-col>
+                    </v-row>
                 </v-tab-item>
             </v-tabs>
         </v-card>
@@ -27,21 +42,26 @@
 </template>
 
 <script>
-    import {Empty} from "ant-design-vue";
-    import AttendanceForm from "../../components/forms/admin/AttendanceForm";
+
+    import DataTable from "../../components/dataTable/DataTable";
+    import {mapActions, mapGetters} from "vuex";
 
     export default {
         name: 'Attendance',
         components: {
-            AttendanceForm,
-            Empty
+            DataTable
         },
         data() {
             return {
                 visible: false,
+                headers: [],
             }
         },
+        computed: {
+            ...mapGetters('attendance', ['getLoading', 'getUserAttendance']),
+        },
         methods: {
+            ...mapActions('attendance', ['_get_attendance']),
             OnUpdate(pk) {
                 console.log(pk)
             },
