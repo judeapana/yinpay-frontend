@@ -8,16 +8,19 @@
             </v-toolbar>
             <v-tabs>
                 <v-tab>All</v-tab>
-                <v-tab>Active</v-tab>
-                <v-tab>Inactive</v-tab>
-                <v-tab>Primary</v-tab>
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <AModal @destroyOnClose="true" :footer="null" title="Create Bank Information" v-model="visible">-->
-                    <!--                            <BankForm button="Create"></BankForm>-->
-                    <!--                        </AModal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Banks</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <BankForm @on-submit="create" button="Create"></BankForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
@@ -43,24 +46,35 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import BankForm from "../../components/forms/admin/BankForm";
 
     export default {
         name: 'Bank',
         components: {
-            // BankForm, Empty
+            BankForm,
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                headers: [
+                    {text: 'Name Of Bank', value: 'name'},
+                    {text: 'Notes', value: 'notes'},
+                    {text: 'Disabled', value: 'disabled'},
+                ]
             }
         },
         computed: {
             ...mapGetters('bank', ['getLoading', 'getBanks']),
         },
         methods: {
-            ...mapActions('bank', ['_get_bank']),
+            ...mapActions('bank', ['_get_bank', '_post_bank']),
+            create(payload) {
+                this._post_bank(payload).then(() => {
+                    this.visible = false
+                    this._get_bank()
+                })
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

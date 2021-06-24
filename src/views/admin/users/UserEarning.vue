@@ -1,12 +1,17 @@
 <template>
     <div>
-        <!--        <empty class="text-center">-->
-        <!--            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-        <!--        </empty>-->
-        <!---->
-        <!--        <AModal :destroyOnClose="true" :footer="null" title="Earnings" v-model="visible" width="900px">-->
-        <!--            <UserEarningForm button="Create"></UserEarningForm>-->
-        <!--        </AModal>-->
+        <v-dialog max-width="690"
+                  v-if="visible"
+                  v-model="visible">
+            <v-card>
+                <v-card-title>User Earnings</v-card-title>
+                <v-card-subtitle>Please provide the following information to complete the form
+                </v-card-subtitle>
+                <v-card-text>
+                    <UserEarningForm @on-submit="create" button="Create"></UserEarningForm>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
         <v-row>
             <v-col cols="12" md="12">
                 <v-col cols="12" md="12">
@@ -29,10 +34,12 @@
     import 'ant-design-vue/dist/antd.css';
     import {mapActions, mapGetters} from "vuex";
     import DataTable from "../../../components/dataTable/DataTable";
+    import UserEarningForm from "../../../components/forms/admin/UserEarningForm";
 
     export default {
         name: 'UserEarning',
         components: {
+            UserEarningForm,
             DataTable
         },
         data() {
@@ -48,6 +55,10 @@
         },
         methods: {
             ...mapActions('user_earning', ['_get_user_earning']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

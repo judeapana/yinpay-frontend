@@ -1,12 +1,17 @@
 <template>
     <div>
-        <!--        <empty class="text-center">-->
-        <!--            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-        <!--        </empty>-->
-        <!---->
-        <!--        <AModal :destroyOnClose="true" :footer="null" title="Leaves" v-model="visible" width="900px">-->
-        <!--            <UserLeaveForm button="Create"></UserLeaveForm>-->
-        <!--        </AModal>-->
+        <v-dialog max-width="690"
+                  v-if="visible"
+                  v-model="visible">
+            <v-card>
+                <v-card-title>User Documents</v-card-title>
+                <v-card-subtitle>Please provide the following information to complete the form
+                </v-card-subtitle>
+                <v-card-text>
+                    <UserLeaveForm @on-submit="create" button="Create"></UserLeaveForm>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
         <v-row>
             <v-col cols="12" md="12">
                 <v-col cols="12" md="12">
@@ -29,10 +34,12 @@
     import 'ant-design-vue/dist/antd.css';
     import DataTable from "../../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import UserLeaveForm from "../../../components/forms/admin/UserLeaveForm";
 
     export default {
         name: 'UserLeave',
         components: {
+            UserLeaveForm,
             DataTable
             // UserLeaveForm,
             // Empty
@@ -50,6 +57,10 @@
         },
         methods: {
             ...mapActions('leave', ['_get_leaves']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

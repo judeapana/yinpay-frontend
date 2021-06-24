@@ -8,24 +8,26 @@
             </v-toolbar>
             <v-tabs>
                 <v-tab>All</v-tab>
-                <v-tab>Active</v-tab>
-                <v-tab>Inactive</v-tab>
-
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
-                    <!--                               v-model="visible"-->
-                    <!--                               title="Create New Personnel Group">-->
-                    <!--                            <PersonnelGroupForm button="Create"></PersonnelGroupForm>-->
-                    <!--                        </a-modal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Create User Grouping</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <PersonnelGroupForm @on-submit="create" button="Create"></PersonnelGroupForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
+
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
-                                <v-card elevation="2">
+                                <v-card :loading="getLoading" elevation="2">
                                     <v-card-actions>
-                                        <v-btn @click="showDrawer">Add Period</v-btn>
+                                        <v-btn @click="showDrawer">Add Grouping</v-btn>
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getPg" :handler="_get_personnel_group" :headers="headers"
@@ -43,25 +45,37 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import PersonnelGroupForm from "../../components/forms/admin/PersonnelGroupForm";
 
     export default {
         name: 'PersonnelGroup',
         components: {
-            // PersonnelGroupForm,
-            // Empty
+            PersonnelGroupForm,
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                headers: [
+                    {text: 'Name', align: 'start', value: 'name',},
+                    {text: 'Category', align: 'start', value: 'category',},
+                    {text: 'Description', align: 'start', value: 'description',},
+                    {text: 'Disabled', align: 'start', value: 'disabled',},
+                    {text: 'Actions', value: 'actions'},
+                ]
             }
         },
         computed: {
             ...mapGetters('personnel_group', ['getLoading', 'getPg']),
         },
         methods: {
-            ...mapActions('personnel_group', ['_get_personnel_group']),
+            ...mapActions('personnel_group', ['_get_personnel_group', '_post_personnel_group']),
+            create(payload) {
+                this._post_personnel_group(payload).then(() => {
+                    this.visible = false
+                    this._get_personnel_group()
+                })
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

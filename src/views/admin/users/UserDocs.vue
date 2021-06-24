@@ -1,16 +1,20 @@
 <template>
     <div>
-        <!--        <empty class="text-center">-->
-        <!--            <AModal :footer="null" title="User Upload Documents" v-model="visible">-->
-        <!--                <UserDocForm button="Upload"></UserDocForm>-->
-        <!--            </AModal>-->
-        <!--            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-        <!--        </empty>-->
+        <v-dialog max-width="690"
+                  v-if="visible"
+                  v-model="visible">
+            <v-card>
+                <v-card-title>User Documents</v-card-title>
+                <v-card-subtitle>Please provide the following information to complete the form
+                </v-card-subtitle>
+                <v-card-text>
+                    <UserDocForm @on-submit="create" button="Create"></UserDocForm>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
         <v-row>
             <v-col cols="12" md="12">
                 <v-col cols="12" md="12">
-                    <!--                    <UserBankForm button="Add Account"></UserBankForm>-->
-                    <!--                    <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
                     <v-card elevation="2">
                         <v-card-title>Documents</v-card-title>
                         <v-card-actions>
@@ -29,10 +33,12 @@
 <script>
     import DataTable from "../../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import UserDocForm from "../../../components/forms/admin/UserDocForm";
 
     export default {
         name: 'UserDocs',
         components: {
+            UserDocForm,
             DataTable
         },
         data() {
@@ -48,6 +54,10 @@
         },
         methods: {
             ...mapActions('docs', ['_get_docs']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

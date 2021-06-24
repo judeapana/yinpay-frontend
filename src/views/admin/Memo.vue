@@ -5,8 +5,6 @@
         </v-toolbar>
         <v-tabs>
             <v-tab>All</v-tab>
-            <v-tab>Delivered</v-tab>
-            <v-tab>UnDelivered</v-tab>
 
             <v-tab-item>
                 <v-row>
@@ -24,15 +22,20 @@
                         </v-col>
                     </v-col>
                 </v-row>
-                <!--                <empty class="text-center">-->
-                <!--                    <AModal @destroyOnClose="true" :footer="null" title="New Memo" v-model="visible">-->
-                <!--                        <MemoForm button="Create"></MemoForm>-->
-                <!--                    </AModal>-->
-                <!--                    <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                <!--                </empty>-->
+                <v-dialog max-width="690"
+                          v-if="visible"
+                          v-model="visible">
+                    <v-card>
+                        <v-card-title>Memo</v-card-title>
+                        <v-card-subtitle>Please provide the following information to complete the form
+                        </v-card-subtitle>
+                        <v-card-text>
+                            <MemoForm @on-submit="create" button="Create"></MemoForm>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
+
             </v-tab-item>
-            <v-tab-item></v-tab-item>
-            <v-tab-item></v-tab-item>
         </v-tabs>
 
     </v-card>
@@ -41,25 +44,36 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import MemoForm from "../../components/forms/admin/MemoForm";
 
     export default {
         name: 'Memo',
         components: {
-            // MemoForm,
+            MemoForm,
             DataTable
-            // Empty
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                headers: [
+                    {text: 'Title', value: 'title'},
+                    {text: 'Date', value: 'date'},
+                    {text: 'created', value: 'created'},
+                    {text: 'Action', value: 'actions'},
+                ]
             }
         },
         computed: {
             ...mapGetters('memo', ['getLoading', 'getMemos']),
         },
         methods: {
-            ...mapActions('memo', ['_get_memo']),
+            ...mapActions('memo', ['_get_memo', '_post_memo']),
+            create(payload) {
+                this._post_memo(payload).then(() => {
+                    this.visible = false
+                    this._get_memo()
+                })
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

@@ -1,12 +1,17 @@
 <template>
     <div>
-        <empty class="text-center">
-            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>
-        </empty>
-
-        <!--        <AModal :destroyOnClose="true" :footer="null" title="Attendance" v-model="visible" width="900px">-->
-        <!--            <UserAttendanceForm button="Create"></UserAttendanceForm>-->
-        <!--        </AModal>-->
+        <v-dialog max-width="690"
+                  v-if="visible"
+                  v-model="visible">
+            <v-card>
+                <v-card-title>User Attendance</v-card-title>
+                <v-card-subtitle>Please provide the following information to complete the form
+                </v-card-subtitle>
+                <v-card-text>
+                    <UserAttendanceForm @on-submit="create" button="Create"></UserAttendanceForm>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
         <v-card elevation="2">
             <v-card-title>Attendance</v-card-title>
             <v-card-actions>
@@ -21,16 +26,16 @@
 </template>
 
 <script>
-    import {Empty} from 'ant-design-vue'
     import 'ant-design-vue/dist/antd.css';
-    // import UserAttendanceForm from "../../../components/forms/admin/UserAttendanceForm";
+    import UserAttendanceForm from "../../../components/forms/admin/UserAttendanceForm";
     import {mapActions, mapGetters} from "vuex";
     import DataTable from "../../../components/dataTable/DataTable";
 
     export default {
         name: 'UserAttendance',
         components: {
-            Empty, DataTable
+            UserAttendanceForm,
+            DataTable
         },
         data() {
             return {
@@ -45,6 +50,10 @@
         },
         methods: {
             ...mapActions('attendance', ['_get_user_attendance']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

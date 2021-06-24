@@ -1,19 +1,20 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)" ref="form">
-        <v-combobox items="" label="Tax Name" v-model="form.name"></v-combobox>
-        <v-select label="Period" v-model="form.period"></v-select>
-        <v-select label="Personnel Group" v-model="form.personnel_group"/>
-        <v-text-field label="Rate" v-model="form.rate"></v-text-field>
-        <v-text-field label="Disabled" v-model="form.disabled"></v-text-field>
-        <v-select label="Automate" v-model="form.automate"></v-select>
-        <v-textarea label="Notes" v-model="form.notes"></v-textarea>
-        <v-btn type="submit" v-text="button"></v-btn>
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="form" v-model="valid">
+        <v-combobox :items="['Tax Paye']" :rules="rules.name" label="Tax Name" v-model="form.name"></v-combobox>
+        <v-select :rules="rules.period_id" label="Period" v-model="form.period_id"></v-select>
+        <v-select :rules="rules.personnel_group_id" label="Personnel Group" v-model="form.personnel_group_id"/>
+        <v-text-field :rules="rules.rate" label="Rate" v-model="form.rate"></v-text-field>
+        <v-text-field :rules="rules.disabled" label="Disabled" v-model="form.disabled"></v-text-field>
+        <v-switch :rules="rules.automate" label="Automate" v-model="form.automate"></v-switch>
+        <v-textarea :rules="rules.notes" label="Notes" v-model="form.notes"></v-textarea>
+        <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>
     </v-form>
 </template>
 <script>
     export default {
         name: 'TaxForm',
-        props: {errors: {
+        props: {
+            errors: {
                 type: Object
             },
             tax: {
@@ -30,9 +31,19 @@
         },
         data() {
             return {
+                valid: false,
+                rules: {
+                    name: [this.required(), this.api('name')],
+                    period_id: [this.required(), this.api('period_id')],
+                    personnel_group_id: [this.required(), this.api('personnel_group_id')],
+                    rate: [this.required(), this.api('rate')],
+                    disabled: [this.api('disabled')],
+                    automate: [this.api('automate')],
+                    notes: [this.required(), this.api('notes')],
+                },
                 form: {
-                    period: {},
-                    personnel_group: {},
+                    period_id: '',
+                    personnel_group_id: '',
                     name: "",
                     rate: 0,
                     disabled: false,

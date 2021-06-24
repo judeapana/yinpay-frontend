@@ -11,14 +11,18 @@
                 <v-tab>Primary</v-tab>
 
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
-                    <!--                                 title="Create New Personnel Group"-->
-                    <!--                                 v-model="visible">-->
-                    <!--                            <BusinessForm button="Create"></BusinessForm>-->
-                    <!--                        </a-modal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Business</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <BusinessForm @on-submit="create" button="Create"></BusinessForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
@@ -42,10 +46,12 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import BusinessForm from "../../components/forms/admin/BusinessForm";
 
     export default {
         name: 'Business',
         components: {
+            BusinessForm,
             // BusinessForm,
             // Empty
             DataTable
@@ -61,6 +67,9 @@
         },
         methods: {
             ...mapActions('business', ['_getBusiness']),
+            create(payload){
+              console.log(payload)
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

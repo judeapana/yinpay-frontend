@@ -3,8 +3,19 @@
         <v-row>
             <v-col cols="12" md="12">
                 <v-col cols="12" md="12">
-                    <!--                    <UserBankForm button="Add Account"></UserBankForm>-->
-                    <!--                    <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>User Attendance</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <UserBankForm @on-submit="create" button="Create"></UserBankForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
+
                     <v-card elevation="2">
                         <v-card-title>User Bank Accounts</v-card-title>
                         <v-card-actions>
@@ -21,15 +32,15 @@
 </template>
 
 <script>
-    // import UserBankForm from "../../../components/forms/admin/UserBankForm";
     import DataTable from "../../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import UserBankForm from "../../../components/forms/admin/UserBankForm";
 
     export default {
         name: 'UserBank',
         components: {
+            UserBankForm,
             DataTable,
-            // UserBankForm,
         },
         computed: {
             ...mapGetters('bank_detail', ['getLoading', 'getBankDetails']),
@@ -49,6 +60,10 @@
         },
         methods: {
             ...mapActions('bank_detail', ['_get_bank_details']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

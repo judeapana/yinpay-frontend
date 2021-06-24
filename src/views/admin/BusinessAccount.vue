@@ -8,17 +8,21 @@
             </v-toolbar>
             <v-tabs>
                 <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
 
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
-                    <!--                                 title="Create New Personnel Group"-->
-                    <!--                                 v-model="visible">-->
-                    <!--                            <BusinessAccountForm button="Create"></BusinessAccountForm>-->
-                    <!--                        </a-modal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Business Accounts</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <BusinessAccountForm :errors="errors" @on-submit="create"
+                                                     button="Create"></BusinessAccountForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
@@ -42,10 +46,12 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import BusinessAccountForm from "../../components/forms/admin/BusinessAccountForm";
 
     export default {
         name: 'BusinessAccount',
         components: {
+            BusinessAccountForm,
             // BusinessAccountForm,
             // Empty
             DataTable
@@ -53,14 +59,29 @@
         data() {
             return {
                 visible: false,
-                headers: []
+                errors: null,
+                headers: [
+                    {text: 'Account Type', value: 'account_type'},
+                    {text: 'Account Name', value: 'account_name'},
+                    {text: 'Code', value: 'code'},
+                    {text: 'Currency', value: 'currency'},
+                    {text: 'Primary', value: 'primary'},
+                ]
             }
         },
         computed: {
             ...mapGetters('business_account', ['getLoading', 'getBa']),
         },
         methods: {
-            ...mapActions('business_account', ['_get_business_account']),
+            ...mapActions('business_account', ['_get_business_account', '_post_business_account']),
+            create(payload) {
+                this._post_business_account(payload).then(() => {
+                    this.visible = false
+                    this._get_business_account()
+                }).catch((errors) => {
+                    this.errors = errors
+                })
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

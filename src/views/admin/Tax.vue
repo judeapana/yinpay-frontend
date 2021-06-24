@@ -11,14 +11,18 @@
                 <v-tab>Primary</v-tab>
 
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
-                    <!--                                 title="Create New Personnel Group"-->
-                    <!--                                 v-model="visible">-->
-                    <!--                            <TaxForm button="Create"></TaxForm>-->
-                    <!--                        </a-modal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Attendances</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <TaxForm @on-submit="create" button="Create"></TaxForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
@@ -42,10 +46,12 @@
 <script>
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import TaxForm from "../../components/forms/admin/TaxForm";
 
     export default {
         name: 'Business',
         components: {
+            TaxForm,
             // TaxForm,
             // Empty
             DataTable
@@ -61,6 +67,10 @@
         },
         methods: {
             ...mapActions('tax', ['_get_tax']),
+            create(payload) {
+                console.log(payload)
+            },
+
             OnUpdate(pk) {
                 console.log(pk)
             },

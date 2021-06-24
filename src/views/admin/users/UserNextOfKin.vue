@@ -1,11 +1,17 @@
 <template>
     <div>
-        <!--        <empty class="text-center">-->
-        <!--            <AModal title="Next Of Kin" :footer="null" v-model="visible">-->
-        <!--                <NextOfKinForm button="Add"></NextOfKinForm>-->
-        <!--            </AModal>-->
-        <!--            <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-        <!--        </empty>-->
+        <v-dialog max-width="690"
+                  v-if="visible"
+                  v-model="visible">
+            <v-card>
+                <v-card-title>Next Of Kin</v-card-title>
+                <v-card-subtitle>Please provide the following information to complete the form
+                </v-card-subtitle>
+                <v-card-text>
+                    <NextOfKinForm @on-submit="create" button="Create"></NextOfKinForm>
+                </v-card-text>
+            </v-card>
+        </v-dialog>
         <v-card elevation="2">
             <v-card-title>Attendance</v-card-title>
             <v-card-actions>
@@ -22,10 +28,12 @@
 <script>
     import {mapActions, mapGetters} from "vuex";
     import DataTable from "../../../components/dataTable/DataTable";
+    import NextOfKinForm from "../../../components/forms/admin/NextOfKinForm";
 
     export default {
         name: 'UserDocs',
         components: {
+            NextOfKinForm,
             DataTable
         },
         data() {
@@ -41,6 +49,9 @@
         },
         methods: {
             ...mapActions('next_of_kin', ['_get_next_of_kin']),
+            create(payload) {
+                console.log(payload)
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

@@ -12,21 +12,25 @@
                 <v-tab>Inactive</v-tab>
 
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <a-modal @destroyOnClose="true" :footer="null"-->
-                    <!--                                 title="Create New Personnel Group"-->
-                    <!--                                 v-model="visible">-->
-                    <!--                            <AttendanceForm button="Add"></AttendanceForm>-->
-                    <!--                        </a-modal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Attendances</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <AttendanceForm @on-submit="create" button="Create"></AttendanceForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
 
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
                                 <v-card elevation="1">
                                     <v-card-actions>
-                                        <v-btn @click="showDrawer">Add Leave</v-btn>
+                                        <v-btn @click="showDrawer">Add Attendance</v-btn>
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getUserAttendance" :handler="_get_attendance" :headers="headers"
@@ -45,10 +49,12 @@
 
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import AttendanceForm from "../../components/forms/admin/AttendanceForm";
 
     export default {
         name: 'Attendance',
         components: {
+            AttendanceForm,
             DataTable
         },
         data() {
@@ -62,6 +68,9 @@
         },
         methods: {
             ...mapActions('attendance', ['_get_attendance']),
+            create(payload){
+              console.log(payload)
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },

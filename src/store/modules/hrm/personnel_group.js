@@ -52,6 +52,7 @@ const actions = {
         return new Promise((((resolve, reject) => {
             axios.post('/personnel-group/', payload).then(({data}) => {
                 commit('setLoading', false)
+                commit('app/setMsg', {message: 'Group has been created'}, {root: true})
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

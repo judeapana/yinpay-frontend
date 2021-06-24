@@ -56,6 +56,7 @@ const actions = {
             axios.post('/users/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('setUsers', data)
+                commit('app/setMsg', {message: 'User has been created'}, {root: true})
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -71,7 +72,7 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/users/', payload).then(({data}) => {
+            axios.put(`/users/${payload.id}`, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('setUsers', data)
                 commit('app/setErrors', null, {root: true})

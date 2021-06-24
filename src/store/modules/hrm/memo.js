@@ -53,6 +53,7 @@ const actions = {
             axios.post('/memo/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                commit('app/setMsg', {message: 'Memo has been created'}, {root: true})
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

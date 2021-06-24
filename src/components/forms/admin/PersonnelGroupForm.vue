@@ -1,16 +1,16 @@
 <template>
-    <v-form @submit.prevent="$emit('on-submit',form)" ref="pf">
-        <v-text-field label="Personnel Group Name"
+    <v-form @submit.prevent="$emit('on-submit',form)" ref="pf" v-model="valid">
+        <v-text-field :rules="rules.name" label="Personnel Group Name"
                       v-model.trim="form.name">
 
         </v-text-field>
-        <v-select :items="category" label="Personnel Category"
+        <v-select :items="category" :rules="rules.category" label="Personnel Category"
                   v-model.trim="form.category">
         </v-select>
-        <v-textarea :rows="3" label="Description" v-model.trim="form.description"></v-textarea>
-        <v-switch label="Disable" v-model="form.disabled"></v-switch>
+        <v-textarea :rows="3" :rules=rules.description label="Description" v-model.trim="form.description"></v-textarea>
+        <v-switch :rules="rules.disabled" label="Disable" v-model="form.disabled"></v-switch>
 
-        <v-btn class="pt-5" type="submit" v-text="button"></v-btn>
+        <v-btn :disabled="!valid" class="mt-5" type="submit" v-text="button"></v-btn>
     </v-form>
 </template>
 
@@ -35,6 +35,7 @@
         },
         data() {
             return {
+                valid: false,
                 category: ['FullTime', 'PartTime', 'Intern', 'Contract'],
                 rules: {
                     name: [this.required(), this.api('name')],

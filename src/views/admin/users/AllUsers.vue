@@ -1,14 +1,14 @@
 <template>
     <div>
         <v-row>
-            <v-dialog  v-if="visible"
-                    max-width="690"
-                    v-model="visible">
+            <v-dialog max-width="690"
+                      v-if="visible"
+                      v-model="visible">
                 <v-card>
                     <v-card-title>Create New Users</v-card-title>
                     <v-card-subtitle>Please provide the following information to complete the form</v-card-subtitle>
                     <v-card-text>
-                        <UserForm button="Create"></UserForm>
+                        <UserForm :errors="errors" @on-submit="create" button="Create"></UserForm>
                     </v-card-text>
                 </v-card>
             </v-dialog>
@@ -20,8 +20,9 @@
                         <v-btn @click="showDrawer">Create New User</v-btn>
                     </v-card-actions>
                     <v-card-subtitle></v-card-subtitle>
-                    <DataTable :data="getUsers" :handler="_get_user" :headers="headers"
-                               :loading="getLoading"></DataTable>
+                    <DataTable :data="getUsers" :handler="_get_user" :headers="headers" :loading="getLoading"
+                               @on-delete="OnDelete"
+                               @on-edit="OnUpdate"></DataTable>
                 </v-card>
             </v-col>
         </v-row>
@@ -46,6 +47,7 @@
         },
         data() {
             return {
+                errors: null,
                 visible: false,
                 headers: [
                     {text: 'Username', align: 'start', value: 'username',},
@@ -57,7 +59,13 @@
             }
         },
         methods: {
-            ...mapActions('user', ['_get_user']),
+            ...mapActions('user', ['_get_user', '_post_user']),
+            create(payload) {
+                this._post_user(payload).then(() => {
+                    this.visible = false
+                    this._get_user()
+                }).catch((errors) => this.errors = errors)
+            },
             OnUpdate(pk) {
                 console.log(pk)
             },
@@ -69,9 +77,6 @@
             },
             showDrawer() {
                 this.visible = true;
-            },
-            onClose() {
-                this.visible = false;
             },
         }
     }

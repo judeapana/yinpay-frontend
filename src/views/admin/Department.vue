@@ -7,12 +7,18 @@
             <v-tabs>
                 <v-tab>All</v-tab>
                 <v-tab-item>
-                    <!--                    <empty class="text-center">-->
-                    <!--                        <AModal @destroyOnClose="true" v-model="visible" :footer="null" title="New Department">-->
-                    <!--                            <DepartmentForm button="Create"></DepartmentForm>-->
-                    <!--                        </AModal>-->
-                    <!--                        <v-btn @click="showDrawer" color="primary">Create Now</v-btn>-->
-                    <!--                    </empty>-->
+                    <v-dialog max-width="690"
+                              v-if="visible"
+                              v-model="visible">
+                        <v-card>
+                            <v-card-title>Departments</v-card-title>
+                            <v-card-subtitle>Please provide the following information to complete the form
+                            </v-card-subtitle>
+                            <v-card-text>
+                                <DepartmentForm @on-submit="create" button="Create"></DepartmentForm>
+                            </v-card-text>
+                        </v-card>
+                    </v-dialog>
                     <v-row>
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
@@ -40,27 +46,38 @@
 
     import DataTable from "../../components/dataTable/DataTable";
     import {mapActions, mapGetters} from "vuex";
+    import DepartmentForm from "../../components/forms/admin/DepartmentForm";
 
     export default {
         name: 'Department',
         components: {
-            // DepartmentForm,
+            DepartmentForm,
             // Empty
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                headers: [
+                    {text: 'Name Of Department', value: 'name'},
+                    {text: 'Code', value: 'code'},
+                    {text: 'Description', value: 'description'},
+                ]
             }
         },
         computed: {
             ...mapGetters('department', ['getLoading', 'getDepartments']),
         },
         methods: {
-            ...mapActions('department', ['_get_department']),
+            ...mapActions('department', ['_get_department', '_post_department']),
             OnUpdate(pk) {
                 console.log(pk)
+            },
+            create(payload) {
+                this._post_department(payload).then(() => {
+                    this.visible = false
+                    this._get_department()
+                })
             },
             OnDelete(pk) {
                 console.log(pk)

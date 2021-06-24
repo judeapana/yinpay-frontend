@@ -71,6 +71,7 @@ axios.interceptors.response.use(response => {
             setAuthHeader(getRefreshToken())
             store.dispatch('auth/_refresh').then((data) => {
                 setToken(data)
+                window.location.reload()
                 return axios(config)
             }).catch(() => {
                 store.dispatch('auth/_logout')
