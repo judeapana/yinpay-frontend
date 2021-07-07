@@ -48,7 +48,7 @@ const actions = {
             })
         })))
     },
-    _post_user({commit}, payload) {
+    _post_user({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -56,6 +56,7 @@ const actions = {
             axios.post('/users/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('setUsers', data)
+                dispatch('_get_user')
                 commit('app/setMsg', {message: 'User has been created'}, {root: true})
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -67,13 +68,14 @@ const actions = {
             })
         })))
     },
-    _put_user({commit}, payload) {
+    _put_user({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.put(`/users/${payload.id}`, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_user')
                 commit('setUsers', data)
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
@@ -85,14 +87,15 @@ const actions = {
             })
         })))
     },
-    _delete_user({commit}, payload) {
+    _delete_user({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/users/', payload).then(({data}) => {
+            axios.delete('/users/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('setUsers', data)
+                dispatch('_get_user')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

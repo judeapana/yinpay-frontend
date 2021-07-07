@@ -4,13 +4,11 @@
             <v-app-bar-nav-icon @click="drawer =!drawer"></v-app-bar-nav-icon>
             <v-app-bar-title v-text="title"></v-app-bar-title>
             <v-spacer></v-spacer>
-            <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
+            <v-btn  rounded @click="$emit('on-create-bs')">
+                Business
+                <v-icon>mdi-plus</v-icon>
             </v-btn>
 
-            <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
-            </v-btn>
             <AvatarDropdown/>
         </v-app-bar>
 

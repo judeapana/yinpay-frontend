@@ -25,6 +25,7 @@ import tax from "./modules/payroll/tax";
 import ssr from "./modules/payroll/ssr";
 import working_days from "./modules/payroll/working_days";
 import personnel_group from "./modules/hrm/personnel_group";
+import user_attendance from './modules/payroll/user.attendance'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -52,6 +53,7 @@ export default new Vuex.Store({
         deduction_group,
         daily_rate, memo,
         personnel_group,
+        user_attendance,
         department, bank, business_account, working_days
     },
     plugins: [createPersistedState()]

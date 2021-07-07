@@ -41,6 +41,16 @@ export default {
         api(errorCode) {
             return () => {
                 try {
+                    if (errorCode.includes('.')) {
+                        let b = errorCode.split('.')
+
+
+                        return Object.prototype.hasOwnProperty.call(this.apiErrors[b[0]], b[1]) ?
+                            typeof this.apiErrors[b[0]][b[1]] === "string" ?
+                                this.apiErrors[b[0]][b[1]] :
+                                this.apiErrors[b[0]][b[1]].join('<br>') :
+                            true
+                    }
                     return Object.prototype.hasOwnProperty.call(this.apiErrors, errorCode) ?
                         typeof this.apiErrors[errorCode] === "string" ?
                             this.apiErrors[errorCode] :

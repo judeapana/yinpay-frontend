@@ -7,12 +7,30 @@
 
 <script>
     import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
-    import {mapGetters} from "vuex";
+    import {mapActions, mapGetters} from "vuex";
+    import axios from "axios";
+    import {logoutUser} from "./utils";
 
     export default {
         name: 'App',
         components: {
             'n-progress-container': NprogressContainer
+        },
+        methods: {
+            ...mapActions('auth', ['_logout'])
+        },
+        beforeCreate() {
+            axios.interceptors.response.use(response => {
+                return response
+            }, error => {
+                const {response: {status}} = error;
+                if (status === 401) {
+                    logoutUser()
+                    window.location.reload()
+                    return
+                }
+                return Promise.reject(error)
+            })
         },
         data: () => ({}),
         computed: {

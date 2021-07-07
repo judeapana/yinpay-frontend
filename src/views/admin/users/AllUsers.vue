@@ -5,10 +5,13 @@
                       v-if="visible"
                       v-model="visible">
                 <v-card>
-                    <v-card-title>Create New Users</v-card-title>
+                    <v-card-title> Users</v-card-title>
                     <v-card-subtitle>Please provide the following information to complete the form</v-card-subtitle>
-                    <v-card-text>
+                    <v-card-text v-if="!payload">
                         <UserForm :errors="errors" @on-submit="create" button="Create"></UserForm>
+                    </v-card-text>
+                    <v-card-text v-else>
+                        <UserForm  :errors="errors" :user="payload" @on-submit="update" button="Update"></UserForm>
                     </v-card-text>
                 </v-card>
             </v-dialog>
@@ -54,20 +57,31 @@
                     {text: 'Email Address', value: 'email_address',},
                     {text: 'Phone Number', value: 'phone_number',},
                     {text: 'Role', value: 'role',},
+                    {text: 'Disabled', value: 'disabled',},
+                    {text: 'Created', value: 'created',},
                     {text: 'Actions', value: 'actions', sortable: false},
                 ],
             }
         },
         methods: {
-            ...mapActions('user', ['_get_user', '_post_user']),
+            ...mapActions('user', ['_get_user', '_post_user', '_put_user']),
             create(payload) {
                 this._post_user(payload).then(() => {
                     this.visible = false
                     this._get_user()
                 }).catch((errors) => this.errors = errors)
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                delete payload.password
+                this._put_user({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -76,6 +90,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
         }

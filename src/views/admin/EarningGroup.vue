@@ -7,8 +7,7 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
@@ -18,8 +17,13 @@
                             <v-card-title>Earning Group</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <EarningGroupForm @on-submit="create" button="Create"></EarningGroupForm>
+                            <v-card-text v-if="!payload">
+                                <EarningGroupForm :errors="errors" @on-submit="create"
+                                                  button="Create"></EarningGroupForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <EarningGroupForm :earning="payload" :errors="errors" @on-submit="update"
+                                                  button="Update"></EarningGroupForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -32,7 +36,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getEg" :handler="_get_earning_group" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,26 +57,47 @@
         name: 'EarningGroup',
         components: {
             EarningGroupForm,
-            // EarningGroupForm,
-            // Empty
             DataTable
         },
         data() {
             return {
+                errors: null,
+                payload: null,
                 visible: false,
+                headers: [
+                    {text: 'Name', value: 'name'},
+                    {text: 'Personnel Group', value: 'personnel_group.name'},
+                    {text: 'Disabled', value: 'disabled'},
+                    {text: 'Notes', value: 'notes'},
+                    {text: 'Per day', value: 'per_day'},
+                    {text: 'Allowances', value: 'allowance'},
+                    {text: 'Actions', value: 'actions', align: 'right'}
+
+                ]
             }
         },
         computed: {
             ...mapGetters('earning_group', ['getLoading', 'getEg']),
         },
         methods: {
-            ...mapActions('earning_group', ['_get_earning_group']),
+            ...mapActions('earning_group', ['_get_earning_group', '_post_earning_group', '_put_earning_group']),
             create(payload) {
-                console.log(payload)
+                this._post_earning_group(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_earning_group({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -80,6 +106,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_tax({commit}, payload) {
+    _post_tax({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/tax/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_tax')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_tax({commit}, payload) {
+    _put_tax({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/tax/', payload).then(({data}) => {
+            axios.put('/tax/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_tax')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,14 +81,15 @@ const actions = {
             })
         })))
     },
-    _delete_tax({commit}, payload) {
+    _delete_tax({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/tax/', payload).then(({data}) => {
+            axios.delete('/tax/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_tax')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

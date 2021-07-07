@@ -17,7 +17,8 @@
                                 </v-card-actions>
                                 <v-card-subtitle></v-card-subtitle>
                                 <DataTable :data="getMemos" :handler="_get_memo" :headers="headers"
-                                           :loading="getLoading"></DataTable>
+                                           :loading="getLoading"
+                                           @on-edit="OnUpdate"></DataTable>
                             </v-card>
                         </v-col>
                     </v-col>
@@ -29,8 +30,11 @@
                         <v-card-title>Memo</v-card-title>
                         <v-card-subtitle>Please provide the following information to complete the form
                         </v-card-subtitle>
-                        <v-card-text>
-                            <MemoForm @on-submit="create" button="Create"></MemoForm>
+                        <v-card-text v-if="!payload">
+                            <MemoForm :errors="errors" @on-submit="create" button="Create"></MemoForm>
+                        </v-card-text>
+                        <v-card-text v-else>
+                            <MemoForm :errors="errors" :memo="payload" @on-submit="update" button="Update"></MemoForm>
                         </v-card-text>
                     </v-card>
                 </v-dialog>
@@ -55,6 +59,8 @@
         data() {
             return {
                 visible: false,
+                errors: null,
+                payload: null,
                 headers: [
                     {text: 'Title', value: 'title'},
                     {text: 'Date', value: 'date'},
@@ -67,15 +73,24 @@
             ...mapGetters('memo', ['getLoading', 'getMemos']),
         },
         methods: {
-            ...mapActions('memo', ['_get_memo', '_post_memo']),
+            ...mapActions('memo', ['_get_memo', '_post_memo', '_put_memo']),
             create(payload) {
                 this._post_memo(payload).then(() => {
                     this.visible = false
-                    this._get_memo()
+                }).catch((e) => {
+                    this.errors = e
                 })
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_memo({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -84,6 +99,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

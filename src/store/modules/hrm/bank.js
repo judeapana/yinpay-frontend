@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_bank({commit}, payload) {
+    _post_bank({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/bank/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_bank')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,13 +63,14 @@ const actions = {
             })
         })))
     },
-    _put_bank({commit}, payload) {
+    _put_bank({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/bank/', payload).then(({data}) => {
+            axios.put('/bank/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_bank')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_bank({commit}, payload) {
+    _delete_bank({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/bank/', payload).then(({data}) => {
+            axios.delete('/bank/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_bank')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

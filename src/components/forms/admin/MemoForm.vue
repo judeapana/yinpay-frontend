@@ -53,9 +53,9 @@
                 },
                 dateMenu: false,
                 form: {
-                    title: '',
-                    date: '',
-                    text: ''
+                    title: this.memo?.title || '',
+                    date: this.memo?.date || '',
+                    text: this.memo?.text || ''
                 }
             }
         },

@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_user_attendance({commit}, payload) {
+    _post_user_attendance({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/user-attendance/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_user_attendance')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_user_attendance({commit}, payload) {
+    _put_user_attendance({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/user-attendance/', payload).then(({data}) => {
+            axios.put('/user-attendance/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_user_attendance')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_attendance({commit}, payload) {
+    _delete_attendance({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/user-attendance/', payload).then(({data}) => {
+            axios.delete('/user-attendance/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_user_attendance')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

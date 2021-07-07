@@ -44,10 +44,10 @@
                     disabled: [],
                 },
                 form: {
-                    name: '',
-                    category: '',
-                    description: '',
-                    disabled: false
+                    name: this.personnel_group?.name || '',
+                    category: this.personnel_group?.category || '',
+                    description: this.personnel_group?.description || '',
+                    disabled: this.personnel_group?.disabled || false
                 }
             }
         },

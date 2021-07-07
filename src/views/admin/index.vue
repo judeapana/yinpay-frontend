@@ -1,12 +1,17 @@
 <template>
-    <AppLayout>
+    <AppLayout @on-create-bs="visible =!visible">
         <template v-slot:content>
             <modal :destroyOnClose="true" :dialog-style="{ top: '20px' }"
                    :mask-style="{backgroundColor:'rgba(29,25,25,0.53)'}"
                    :visible="visible"
+
                    title="Setup A New Business" width="700px">
+                <template v-slot:closeIcon>
+                    <v-btn icon @click="visible =!visible" depressed v-if="getCurrentBs"><v-icon>mdi-close</v-icon></v-btn>
+                </template>
                 <template v-slot:footer>
-                    <v-btn @click="logout" depressed>Logout</v-btn>
+                    <v-btn @click="logout" depressed v-if="!getCurrentBs">Logout</v-btn>
+                    <v-btn @click="visible =!visible" depressed v-if="getCurrentBs">Close</v-btn>
                 </template>
                 <BusinessForm :errors="errors" @on-submit="submit" button="Create"></BusinessForm>
             </modal>
@@ -41,7 +46,7 @@
                         this.setBusiness(business.data[0])
                 }
             }).catch(() => {
-
+                this.$message.error('Something went wrong')
             })
         },
         components: {BusinessForm, AppLayout, Modal},

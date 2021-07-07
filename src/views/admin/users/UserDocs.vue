@@ -7,8 +7,11 @@
                 <v-card-title>User Documents</v-card-title>
                 <v-card-subtitle>Please provide the following information to complete the form
                 </v-card-subtitle>
-                <v-card-text>
-                    <UserDocForm @on-submit="create" button="Create"></UserDocForm>
+                <v-card-text v-if="!payload">
+                    <UserDocForm :errors="errors" @on-submit="create" button="Create"></UserDocForm>
+                </v-card-text>
+                <v-card-text v-else>
+                    <UserDocForm :doc="payload" :errors="errors" @on-submit="update" button="Update"></UserDocForm>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -21,8 +24,8 @@
                             <v-btn @click="showDrawer">Add Document</v-btn>
                         </v-card-actions>
                         <v-card-subtitle></v-card-subtitle>
-                        <DataTable :data="getDocs" :handler="_get_docs" :headers="headers"
-                                   :loading="getLoading"></DataTable>
+                        <DataTable has_file="doc" :data="getDocs" :handler="_get_docs" :headers="headers" :loading="getLoading"
+                                   @on-edit="OnUpdate"></DataTable>
                     </v-card>
                 </v-col>
             </v-col>
@@ -44,8 +47,13 @@
         data() {
             return {
                 visible: false,
+                payload: null,
+                errors: null,
                 headers: [
                     {text: 'User', align: 'start', value: 'user_meta.user.username',},
+                    {text: 'Date', value: 'date',},
+                    {text: 'Notes', value: 'notes',},
+                    {text: 'Action', value: 'actions',},
                 ]
             }
         },
@@ -53,13 +61,50 @@
             ...mapGetters('docs', ['getLoading', 'getDocs']),
         },
         methods: {
-            ...mapActions('docs', ['_get_docs']),
+            ...mapActions('docs', ['_get_docs', '_post_docs', '_put_docs']),
+            ...mapActions('upload', ['_post_upload_file', '_put_upload_file']),
             create(payload) {
-                console.log(payload)
+                let formData = new FormData();
+                formData.append('file', payload.doc);
+                delete payload.doc
+                this._post_docs(payload).then((data) => {
+                    let _payload = {
+                        loc: 'doc',
+                        id: data.id,
+                        file: formData
+                    }
+                    this._post_upload_file(_payload).then(() => {
+                        this.visible = false
+                    })
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                let formData = new FormData();
+                formData.append('file', payload.doc);
+                delete payload.doc
+                this._put_docs({...payload, id: this.payload.id}).then((data) => {
+                    if (formData.get('file')) {
+                        let _payload = {
+                            loc: 'doc',
+                            id: data.id,
+                            file: formData
+                        }
+                        this._put_upload_file(_payload).then(() => {
+                            this.visible = false
+                            this._get_docs()
+                        })
+                    } else {
+                        this.visible = false
+                    }
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -68,6 +113,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

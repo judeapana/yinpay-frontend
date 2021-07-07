@@ -7,8 +7,7 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
@@ -18,8 +17,13 @@
                             <v-card-title>SSR</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <SocialSecurityRateForm @on-submit="create" button="Create"></SocialSecurityRateForm>
+                            <v-card-text v-if="!payload">
+                                <SocialSecurityRateForm :errors="errors" @on-submit="create"
+                                                        button="Create"></SocialSecurityRateForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <SocialSecurityRateForm :errors="errors" :ssr="payload" @on-submit="update"
+                                                        button="Update"></SocialSecurityRateForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -32,7 +36,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getSsr" :handler="_get_ssr" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,27 +57,46 @@
         name: 'SSR',
         components: {
             SocialSecurityRateForm,
-            // SocialSecurityRateForm,
-            // Empty
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                payload: null,
+                headers: [
+                    {text: 'Period', value: 'period.name'},
+                    {text: 'Employee Rate(%)', value: 'emp_rate'},
+                    {text: 'Employer Rate(%)', value: 'emper_rate'},
+                    {text: 'Tier 1(%)', value: 'tier1'},
+                    {text: 'Tier 2(%)', value: 'tier2'},
+                    {text: 'Actions', value: 'actions', align: 'right'}
+
+                ],
+                errors: null,
             }
         },
         computed: {
             ...mapGetters('ssr', ['getLoading', 'getSsr']),
         },
         methods: {
-            ...mapActions('ssr', ['_get_ssr']),
+            ...mapActions('ssr', ['_get_ssr', '_post_ssr', '_put_ssr']),
             create(payload) {
-                console.log(payload)
+                this._post_ssr(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_ssr({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -81,6 +105,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

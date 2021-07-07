@@ -7,8 +7,12 @@
                 <v-card-title>Daily Rates</v-card-title>
                 <v-card-subtitle>Please provide the following information to complete the form
                 </v-card-subtitle>
-                <v-card-text>
-                    <DailyRateForm @on-submit="create" button="Create"></DailyRateForm>
+                <v-card-text v-if="!payload">
+                    <DailyRateForm :errors="errors" @on-submit="create" button="Create"></DailyRateForm>
+                </v-card-text>
+                <v-card-text v-else>
+                    <DailyRateForm :daily_rate="payload" :errors="errors" @on-submit="update"
+                                   button="Update"></DailyRateForm>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -22,7 +26,8 @@
                         </v-card-actions>
                         <v-card-subtitle></v-card-subtitle>
                         <DataTable :data="getDailyRate" :handler="_get_daily_rate" :headers="headers"
-                                   :loading="getLoading"></DataTable>
+                                   :loading="getLoading"
+                                   @on-edit="OnUpdate"></DataTable>
                     </v-card>
                 </v-col>
             </v-col>
@@ -45,8 +50,16 @@
         data() {
             return {
                 visible: false,
+                payload: null,
+                errors: null,
                 headers: [
-                    {text: 'User', align: 'start', value: 'user_meta.user.username',},
+                    {text: 'User', value: 'user_meta.user.username',},
+                    {text: 'Period', value: 'period.name',},
+                    {text: 'Main Amount', value: 'main_amount',},
+                    {text: 'Emergency Amount', value: 'emergency_amount',},
+                    {text: 'Disabled', value: 'disabled',},
+                    {text: 'Notes', value: 'notes',},
+                    {text: 'Actions', value: 'actions',},
                 ]
             }
         },
@@ -54,12 +67,24 @@
             ...mapGetters('daily_rate', ['getLoading', 'getDailyRate']),
         },
         methods: {
-            ...mapActions('daily_rate', ['_get_daily_rate']),
+            ...mapActions('daily_rate', ['_get_daily_rate', '_post_daily_rate', '_put_daily_rate']),
             create(payload) {
-                console.log(payload)
+                this._post_daily_rate(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_daily_rate({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -68,6 +93,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

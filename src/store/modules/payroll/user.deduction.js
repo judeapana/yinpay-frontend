@@ -45,7 +45,7 @@ const actions = {
             })
         })))
     },
-    _post_user_deduction({commit}, payload) {
+    _post_user_deduction({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -53,6 +53,7 @@ const actions = {
             axios.post('/user-deduction/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_user_deduction')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_user_deduction({commit}, payload) {
+    _put_user_deduction({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/user-deduction/', payload).then(({data}) => {
+            axios.put('/user-deduction/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_user_deduction')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,14 +81,15 @@ const actions = {
             })
         })))
     },
-    _delete_user_deduction({commit}, payload) {
+    _delete_user_deduction({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/user-deduction/', payload).then(({data}) => {
+            axios.delete('/user-deduction/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_user_deduction')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

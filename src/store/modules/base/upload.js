@@ -42,7 +42,68 @@ const actions = {
                 reject(error.response)
             })
         })))
-    }
+    },
+    _put_upload_img({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.put(`/upload/img/${payload.id}`, payload.img, {
+                params: {loc: payload.loc},
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response)
+            })
+        })))
+    },
+    _post_upload_file({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.post(`/upload/file/${payload.id}`, payload.file, {
+                params: {loc: payload.loc},
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response)
+            })
+        })))
+    }, _put_upload_file({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.put(`/upload/file/${payload.id}`, payload.file, {
+                params: {loc: payload.loc},
+                headers: {'Content-Type': 'multipart/form-data'}
+            }).then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response)
+            })
+        })))
+    },
+
+
 }
 
 export default {

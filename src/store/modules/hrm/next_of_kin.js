@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_next_of_kin({commit}, payload) {
+    _post_next_of_kin({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/next-of-kin/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_next_of_kin')
                 commit('app/setErrors', null, {root: true})
                 commit('setNextOfKin', data)
                 resolve(data)
@@ -63,14 +64,15 @@ const actions = {
             })
         })))
     },
-    _put_next_of_kin({commit}, payload) {
+    _put_next_of_kin({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/next-of-kin/', payload).then(({data}) => {
+            axios.put('/next-of-kin/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_next_of_kin')
                 commit('setNextOfKin', data)
                 resolve(data)
             }).catch((error) => {
@@ -81,14 +83,15 @@ const actions = {
             })
         })))
     },
-    _delete_next_of_kin({commit}, payload) {
+    _delete_next_of_kin({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/next-of-kin/', payload).then(({data}) => {
+            axios.delete('/next-of-kin/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_next_of_kin')
                 commit('setNextOfKin', data)
                 resolve(data)
             }).catch((error) => {

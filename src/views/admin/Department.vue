@@ -14,8 +14,12 @@
                             <v-card-title>Departments</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <DepartmentForm @on-submit="create" button="Create"></DepartmentForm>
+                            <v-card-text v-if="!payload">
+                                <DepartmentForm :errors="errors" @on-submit="create" button="Create"></DepartmentForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <DepartmentForm :department="payload" :errors="errors" @on-submit="update"
+                                                button="Update"></DepartmentForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -29,7 +33,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getDepartments" :handler="_get_department" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,16 +57,19 @@
         name: 'Department',
         components: {
             DepartmentForm,
-            // Empty
             DataTable
         },
         data() {
             return {
                 visible: false,
+                errors: null,
+                payload: null,
                 headers: [
                     {text: 'Name Of Department', value: 'name'},
-                    {text: 'Code', value: 'code'},
-                    {text: 'Description', value: 'description'},
+                    {text: 'Code', value: 'abbr'},
+                    {text: 'Disabled', value: 'disabled'},
+                    {text: 'Notes', value: 'notes'},
+                    {text: 'Actions', value: 'actions', align: 'right'}
                 ]
             }
         },
@@ -69,14 +77,23 @@
             ...mapGetters('department', ['getLoading', 'getDepartments']),
         },
         methods: {
-            ...mapActions('department', ['_get_department', '_post_department']),
-            OnUpdate(pk) {
-                console.log(pk)
+            ...mapActions('department', ['_get_department', '_post_department', '_put_department']),
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             create(payload) {
                 this._post_department(payload).then(() => {
                     this.visible = false
-                    this._get_department()
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            update(payload) {
+                this._put_department({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
                 })
             },
             OnDelete(pk) {
@@ -86,6 +103,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

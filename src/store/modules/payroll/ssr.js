@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_ssr({commit}, payload) {
+    _post_ssr({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/ssr/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_ssr')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_ssr({commit}, payload) {
+    _put_ssr({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/ssr/', payload).then(({data}) => {
+            axios.put('/ssr/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_ssr')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_ssr({commit}, payload) {
+    _delete_ssr({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/ssr/', payload).then(({data}) => {
+            axios.delete('/ssr/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_ssr')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

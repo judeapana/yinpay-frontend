@@ -43,6 +43,7 @@ import UserAttendance from "../views/admin/users/UserAttendance";
 import UserDeduction from "../views/admin/users/UserDeduction";
 import UserLeave from "../views/admin/users/UserLeave";
 import UserDailyRate from "../views/admin/users/UserDailyRate";
+import axios from "axios";
 
 Vue.use(VueRouter)
 
@@ -126,7 +127,12 @@ export const routes = [
                     //new
                     {path: 'daily-rate', name: 'daily_rate', component: UserDailyRate, meta: {loginRequired: true},},
                     {path: 'earnings', name: 'earnings', component: UserEarning, meta: {loginRequired: true},},
-                    {path: 'attendance', name: 'user_attendance', component: UserAttendance, meta: {loginRequired: true},},
+                    {
+                        path: 'attendance',
+                        name: 'user_attendance',
+                        component: UserAttendance,
+                        meta: {loginRequired: true},
+                    },
                     {path: 'deductions', name: 'deductions', component: UserDeduction, meta: {loginRequired: true},},
                     {path: 'leaves', name: 'leaves', component: UserLeave, meta: {loginRequired: true},},
                 ]
@@ -185,6 +191,7 @@ router.beforeEach((to, from, next) => {
         Vue.prototype.$message.error('You have to login to access this page')
         return next({name: 'SignIn', query: {return: to.path}})
     }
+
     store.dispatch('app/_loading', true)
     next()
 
@@ -193,5 +200,16 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
     store.dispatch('app/_loading', false)
 })
+
+
+axios.interceptors.request.use((config) => {
+    if (store.state.business.currentBs?.id && store.state['auth'].loggedIn)
+        if (!config.url.includes('business'))
+            config.params = {...config.params, 'selector': store.state.business.currentBs.id}
+    return config
+}, error => {
+    return Promise.reject(error)
+})
+
 
 export default router

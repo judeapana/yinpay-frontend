@@ -27,7 +27,6 @@ const mutations = {
 }
 
 const actions = {
-    // login to yinpay portal
     _auth({commit}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
@@ -110,8 +109,8 @@ const actions = {
     },
     _logout({commit}, payload) {
         commit('setLoading', true)
-        commit('setErrors', null)
-        commit('setMsg', null)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/auth/logout', payload).then(({data}) => {
                 commit('setLoggedIn', false)

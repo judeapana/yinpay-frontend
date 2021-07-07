@@ -7,19 +7,21 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
                               v-if="visible"
                               v-model="visible">
                         <v-card>
-                            <v-card-title>Attendances</v-card-title>
+                            <v-card-title>Tax</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <TaxForm @on-submit="create" button="Create"></TaxForm>
+                            <v-card-text v-if="!payload">
+                                <TaxForm :errors="errors" @on-submit="create" button="Create"></TaxForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <TaxForm :errors="errors" :tax="payload" @on-submit="update" button="Update"></TaxForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -28,11 +30,12 @@
                             <v-col cols="12" md="12">
                                 <v-card elevation="2">
                                     <v-card-actions>
-                                        <v-btn @click="showDrawer">Add SSR</v-btn>
+                                        <v-btn @click="showDrawer">Add Taxation</v-btn>
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getTax" :handler="_get_tax" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,27 +55,47 @@
         name: 'Business',
         components: {
             TaxForm,
-            // TaxForm,
-            // Empty
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                payload: null,
+                headers: [
+                    {text: 'Period', value: 'period.name'},
+                    {text: 'Personnel Group', value: 'personnel_group.name'},
+                    {text: 'Name', value: 'name'},
+                    {text: 'Rate', value: 'rate'},
+                    {text: 'Disabled', value: 'disabled'},
+                    {text: 'Automate', value: 'automate'},
+                    {text: 'Notes', value: 'notes'},
+                    {text: 'Actions', value: 'actions', align: 'right'},
+                ],
+                errors: null
             }
         },
         computed: {
             ...mapGetters('tax', ['getLoading', 'getTax']),
         },
         methods: {
-            ...mapActions('tax', ['_get_tax']),
+            ...mapActions('tax', ['_get_tax', '_post_tax', '_put_tax']),
             create(payload) {
-                console.log(payload)
+                this._post_tax(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_tax({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -81,6 +104,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

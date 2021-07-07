@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_working_days({commit}, payload) {
+    _post_working_days({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/working-day/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_working_days')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,16 @@ const actions = {
             })
         })))
     },
-    _put_working_days({commit}, payload) {
+    _put_working_days({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/working-day/', payload).then(({data}) => {
+            axios.put('/working-day/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_working_days')
+                commit('app/setMsg', {message: 'Working days has been updated'}, {root: true})
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,14 +82,15 @@ const actions = {
             })
         })))
     },
-    _delete_working_days({commit}, payload) {
+    _delete_working_days({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/working-day/', payload).then(({data}) => {
+            axios.delete('/working-day/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_working_days')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

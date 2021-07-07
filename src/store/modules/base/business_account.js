@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_business_account({commit}, payload) {
+    _post_business_account({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/ba/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_business_account')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_business_account({commit}, payload) {
+    _put_business_account({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/ba/', payload).then(({data}) => {
+            axios.put('/ba/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_business_account')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,14 +81,15 @@ const actions = {
             })
         })))
     },
-    _delete_business_account({commit}, payload) {
+    _delete_business_account({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/ba/', payload).then(({data}) => {
+            axios.delete('/ba/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_business_account')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

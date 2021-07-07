@@ -1,7 +1,6 @@
 import axios from "axios";
 import store from '../store/index'
 import jwt_decode from 'jwt-decode'
-import Vue from 'vue'
 
 export const getCurrentUser = () => {
     try {
@@ -54,49 +53,7 @@ export const setAuthHeader = (payload) => {
     axios.defaults.headers['Authorization'] = `Bearer ${payload}`
 }
 
-let subscribers = []
-
-export function addSubscriber(callback) {
-    subscribers.push(callback)
-}
-
-// export const AuthInterceptor = () => {
-axios.interceptors.response.use(response => {
-    return response
-}, error => {
-    const originalRequest = config
-    const {config, response: {status}} = error;
-    if (status === 401) {
-        if (getRefreshToken()) {
-            setAuthHeader(getRefreshToken())
-            store.dispatch('auth/_refresh').then((data) => {
-                setToken(data)
-                window.location.reload()
-                return axios(config)
-            }).catch(() => {
-                store.dispatch('auth/_logout')
-                Vue.prototype.$router.push({name: 'Login'})
-                Promise.reject();
-            })
-
-            return new Promise((resolve) => {
-                addSubscriber(access_token => {
-                    originalRequest.headers.Authorization = 'Bearer ' + access_token
-                    resolve(axios(originalRequest))
-                })
-            })
-        }
-        return Promise.reject(error)
-    }
-    return Promise.reject(error)
-})
-// }
 
 
-axios.interceptors.request.use((config) => {
-    if (isAuthenticated)
-        config.params = {...config.params, 'selector': store.state.business.currentBs.id}
-    return config
-})
 
 

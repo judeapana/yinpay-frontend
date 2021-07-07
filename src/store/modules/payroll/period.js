@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_period({commit}, payload) {
+    _post_period({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/period/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_period')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,14 +63,15 @@ const actions = {
             })
         })))
     },
-    _put_period({commit}, payload) {
+    _put_period({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/period/', payload).then(({data}) => {
+            axios.put('/period/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_period')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_period({commit}, payload) {
+    _delete_period({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/period/', payload).then(({data}) => {
+            axios.delete('/period/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_period')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

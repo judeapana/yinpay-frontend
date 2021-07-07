@@ -36,9 +36,9 @@
                     disabled: [this.api('disabled')]
                 },
                 form: {
-                    name: '',
-                    notes: '',
-                    disabled: false
+                    name: this.bank?.name || '',
+                    notes: this.bank?.notes || '',
+                    disabled: this.bank?.disabled || false
                 }
             }
         },

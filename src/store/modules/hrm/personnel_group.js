@@ -45,7 +45,7 @@ const actions = {
             })
         })))
     },
-    _post_personnel_group({commit}, payload) {
+    _post_personnel_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -53,6 +53,7 @@ const actions = {
             axios.post('/personnel-group/', payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setMsg', {message: 'Group has been created'}, {root: true})
+                dispatch('_get_personnel_group')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -63,13 +64,14 @@ const actions = {
             })
         })))
     },
-    _put_personnel_group({commit}, payload) {
+    _put_personnel_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/personnel-group/', payload).then(({data}) => {
+            axios.put('/personnel-group/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_personnel_group')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -80,13 +82,14 @@ const actions = {
             })
         })))
     },
-    _delete_personnel_group({commit}, payload) {
+    _delete_personnel_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/personnel-group/', payload).then(({data}) => {
+            axios.delete('/personnel-group/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_personnel_group')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

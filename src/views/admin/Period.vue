@@ -18,8 +18,12 @@
                             <v-card-title>Period</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <PeriodForm @on-submit="create" button="Create"></PeriodForm>
+                            <v-card-text v-if="!payload">
+                                <PeriodForm :errors="errors" @on-submit="create" button="Create"></PeriodForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <PeriodForm :errors="errors" :period="payload" @on-submit="update"
+                                            button="Update"></PeriodForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -32,7 +36,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getPeriod" :handler="_get_period" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,27 +57,46 @@
         name: 'Business',
         components: {
             PeriodForm,
-            // PeriodForm,
-            // Empty
+
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                payload: null,
+                headers: [
+                    {text: 'Name Of Month', value: 'name'},
+                    {text: 'Month', value: 'month'},
+                    {text: 'Make Payment', value: 'make_payment'},
+                    {text: 'Disabled', value: 'disabled'},
+                    {text: 'Notes', value: 'notes'},
+                    {text: 'Actions', value: 'actions', align: 'right'},
+                ],
+                errors: null,
             }
         },
         computed: {
             ...mapGetters('period', ['getLoading', 'getPeriod']),
         },
         methods: {
-            ...mapActions('period', ['_get_period']),
+            ...mapActions('period', ['_get_period', '_post_period', '_put_period']),
             create(payload) {
-                console.log(payload)
+                this._post_period(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
-
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_period({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -81,6 +105,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

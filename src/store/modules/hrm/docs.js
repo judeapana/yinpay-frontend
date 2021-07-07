@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_docs({commit}, payload) {
+    _post_docs({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/user-doc/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_docs')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,13 +63,14 @@ const actions = {
             })
         })))
     },
-    _put_docs({commit}, payload) {
+    _put_docs({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/user-doc/', payload).then(({data}) => {
+            axios.put('/user-doc/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_docs')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_docs({commit}, payload) {
+    _delete_docs({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/user-doc/', payload).then(({data}) => {
+            axios.delete('/user-doc/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_docs')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

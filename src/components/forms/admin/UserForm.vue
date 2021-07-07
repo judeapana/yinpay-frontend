@@ -1,11 +1,12 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)" ref="form" v-model="valid">
         <v-row>
-            <v-col cols="12" md="6">
+            <v-col :md="!this.user ? 6 : 12" cols="12">
                 <v-text-field :rules="rules.username" label="User Name" v-model="form.username"></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
-                <v-text-field :rules="rules.password" label="Password" v-model="form.password"></v-text-field>
+                <v-text-field :rules="rules.password" label="Password" v-if="!this.user"
+                              v-model="form.password"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
@@ -30,10 +31,10 @@
                           v-model="form.disabled"></v-switch>
             </v-col>
         </v-row>
-
         <v-expansion-panels class="mb-5" v-model="status">
             <v-expansion-panel>
-                <v-expansion-panel-header>Others Information</v-expansion-panel-header>
+                <v-expansion-panel-header>Others Information
+                </v-expansion-panel-header>
                 <v-expansion-panel-content v-if="status===0">
                     <v-row>
                         <v-col cols="12" md="6">
@@ -159,7 +160,11 @@
                 this.validate(this.$refs.form, value.errors)
             },
             status(value) {
-                value !== 0 ? delete this.form.user_meta : this.form['user_meta'] = this.user_meta
+                if (this.user) {
+                    this.form['user_meta'] = this.user_meta
+                } else {
+                    value !== 0 ? delete this.form.user_meta : this.form['user_meta'] = this.user_meta
+                }
             }
         },
         methods: {
@@ -186,43 +191,43 @@
                     phone_number: [this.required(), this.phone(), this.api('phone_number')],
                     disabled: [this.api('disabled')],
                     user_meta: {
-                        title: [this.api('title')],
-                        marital_status: [this.api('marital_status')],
-                        gender: [this.api('gender')],
-                        religion: [this.api('religion')],
-                        personnel_group_id: [this.api('personnel_group_id')],
-                        department_id: [this.api('department_id')],
-                        dob: [this.api('dob')],
-                        addr: [this.api('addr')],
-                        ssn: [this.api('ssn')],
-                        tin: [this.api('tin')],
-                        retired: [this.api('retired')],
-                        resigned: [this.api('resigned')],
-                        disabled: [this.api('disabled')],
+                        title: [this.required(), this.api('user_meta.title')],
+                        marital_status: [this.required(), this.api('user_meta.marital_status')],
+                        gender: [this.required(), this.api('user_meta.gender')],
+                        religion: [this.api('user_meta.religion')],
+                        personnel_group_id: [this.required(), this.api('user_meta.personnel_group_id')],
+                        department_id: [this.required(), this.api('user_meta.department_id')],
+                        dob: [this.api('user_meta.dob')],
+                        addr: [this.api('user_meta.addr')],
+                        ssn: [this.api('user_meta.ssn')],
+                        tin: [this.api('user_meta.tin')],
+                        retired: [this.api('user_meta.retired')],
+                        resigned: [this.api('user_meta.resigned')],
+                        disabled: [this.api('user_meta.disabled')],
                     }
                 },
                 user_meta: {
-                    personnel_group_id: '',
-                    department_id: '',
-                    title: '',
-                    marital_status: '',
-                    gender: '',
-                    religion: '',
-                    retired: false,
-                    resigned: false,
-                    dob: '',
-                    addr: '',
-                    ssn: '',
-                    tin: '',
+                    personnel_group_id: this.user?.user_meta?.personnel_group_id || '',
+                    department_id: this.user?.user_meta?.department_id || '',
+                    title: this.user?.user_meta?.title || '',
+                    marital_status: this.user?.user_meta?.marital_status || '',
+                    gender: this.user?.user_meta?.gender || '',
+                    religion: this.user?.user_meta?.religion || '',
+                    retired: this.user?.user_meta?.retired || false,
+                    resigned: this.user?.user_meta?.resigned || false,
+                    dob: this.user?.user_meta?.dob || '',
+                    addr: this.user?.user_meta?.addr || '',
+                    ssn: this.user?.user_meta?.ssn || '',
+                    tin: this.user?.user_meta?.tin || '',
                 },
                 form: {
-                    username: '',
-                    password: '',
-                    first_name: '',
-                    last_name: '',
-                    email_address: '',
-                    phone_number: '',
-                    disabled: false,
+                    username: this.user?.username || '',
+                    password: this.user?.password || '',
+                    first_name: this.user?.first_name || '',
+                    last_name: this.user?.last_name || '',
+                    email_address: this.user?.email_address || '',
+                    phone_number: this.user?.phone_number || '',
+                    disabled: this.user?.disabled || false,
 
                 }
             }

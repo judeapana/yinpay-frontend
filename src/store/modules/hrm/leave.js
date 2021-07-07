@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_leaves({commit}, payload) {
+    _post_leaves({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/user-leave/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_leaves')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,13 +63,14 @@ const actions = {
             })
         })))
     },
-    _put_leaves({commit}, payload) {
+    _put_leaves({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/user-leave/', payload).then(({data}) => {
+            axios.put('/user-leave/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_leaves')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -79,13 +81,14 @@ const actions = {
             })
         })))
     },
-    _delete_leave({commit}, payload) {
+    _delete_leave({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/user-leave/', payload).then(({data}) => {
+            axios.delete('/user-leave/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_leaves')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

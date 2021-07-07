@@ -18,11 +18,11 @@ Vue.use(Antd)
 Vue.config.productionTip = false
 Vue.use(VueWorkers, 'vue-workers')
 Vue.use(VCountryRegionSelect)
-Vue.use(VueAxios)
 Vue.use(NProgress)
 
 axios.defaults.baseURL = 'http://127.0.0.1:5000';
 axios.defaults.headers['Authorization'] = `Bearer ${getToken()}`
+Vue.use(VueAxios, axios)
 
 const nprogress = new NProgress()
 Vue.mixin(FormMixin)

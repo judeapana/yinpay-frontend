@@ -45,13 +45,14 @@ const actions = {
             })
         })))
     },
-    _post_deduction_group({commit}, payload) {
+    _post_deduction_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/deduction-group/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_deduction_group')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -62,13 +63,14 @@ const actions = {
             })
         })))
     },
-    _put_deduction_group({commit}, payload) {
+    _put_deduction_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/deduction-group/', payload).then(({data}) => {
+            axios.put('/deduction-group/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_deduction_group')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -79,14 +81,15 @@ const actions = {
             })
         })))
     },
-    _delete_deduction_group({commit}, payload) {
+    _delete_deduction_group({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/deduction-group/', payload).then(({data}) => {
+            axios.delete('/deduction-group/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
+                dispatch('_get_deduction_group')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

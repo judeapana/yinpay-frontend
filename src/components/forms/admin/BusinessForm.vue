@@ -68,17 +68,17 @@
                     phone_number: [this.required(), this.phone(), this.api('phone_number')],
                     btype: [this.required(), this.api('btype')],
                     description: [this.required(), this.api('description')],
-                    logo: [this.required(), this.api('description')]
+                    logo: [this.api('logo')]
                 },
 
                 form: {
                     logo: [],
-                    name: "",
-                    address: "",
-                    support_email: "",
-                    phone_number: "",
-                    btype: "",
-                    description: ""
+                    name: this.business?.name || "",
+                    address: this.business?.address || "",
+                    support_email: this.business?.support_email || "",
+                    phone_number: this.business?.phone_number || "",
+                    btype: this.business?.btype || "",
+                    description: this.business?.description || ""
                 }
             }
         }

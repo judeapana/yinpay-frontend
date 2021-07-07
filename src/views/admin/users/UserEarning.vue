@@ -7,8 +7,12 @@
                 <v-card-title>User Earnings</v-card-title>
                 <v-card-subtitle>Please provide the following information to complete the form
                 </v-card-subtitle>
-                <v-card-text>
-                    <UserEarningForm @on-submit="create" button="Create"></UserEarningForm>
+                <v-card-text v-if="!payload">
+                    <UserEarningForm :errors="errors" @on-submit="create" button="Create"></UserEarningForm>
+                </v-card-text>
+                <v-card-text v-else>
+                    <UserEarningForm :earning="payload" :errors="errors" @on-submit="update"
+                                     button="Update"></UserEarningForm>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -22,7 +26,8 @@
                         </v-card-actions>
                         <v-card-subtitle></v-card-subtitle>
                         <DataTable :data="getUserEarning" :handler="_get_user_earning" :headers="headers"
-                                   :loading="getLoading"></DataTable>
+                                   :loading="getLoading"
+                                   @on-edit="OnUpdate"></DataTable>
                     </v-card>
                 </v-col>
             </v-col>
@@ -44,9 +49,16 @@
         },
         data() {
             return {
+                payload: true,
                 visible: false,
+                errors: null,
                 headers: [
                     {text: 'User', align: 'start', value: 'user_meta.user.username',},
+                    {text: 'Earning Group', value: 'earning_group.name',},
+                    {text: 'Period', value: 'period.name',},
+                    {text: 'Rate(%)', value: 'rate',},
+                    {text: 'Disabled', value: 'disabled',},
+                    {text: 'Action', value: 'actions',},
                 ]
             }
         },
@@ -54,13 +66,25 @@
             ...mapGetters('user_earning', ['getLoading', 'getUserEarning']),
         },
         methods: {
-            ...mapActions('user_earning', ['_get_user_earning']),
+            ...mapActions('user_earning', ['_get_user_earning', '_post_user_earning', '_put_user_earning']),
             create(payload) {
-                console.log(payload)
+                this._post_user_earning(payload).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            update(payload) {
+                this._put_user_earning({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
 
-            OnUpdate(pk) {
-                console.log(pk)
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -69,6 +93,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

@@ -48,7 +48,7 @@ const actions = {
             })
         })))
     },
-    _post_bank_details({commit}, payload) {
+    _post_bank_details({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -57,6 +57,7 @@ const actions = {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 commit('setBankDetails', data)
+                dispatch('_get_bank_details')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -66,15 +67,15 @@ const actions = {
             })
         })))
     },
-    _put_bank_details({commit}, payload) {
+    _put_bank_details({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/bank-detail/', payload).then(({data}) => {
+            axios.put('/bank-detail/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
-                commit('setBankDetails', data)
+                dispatch('_get_bank_details')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})
@@ -84,15 +85,15 @@ const actions = {
             })
         })))
     },
-    _delete_bank_details({commit}, payload) {
+    _delete_bank_details({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/bank-detail/', payload).then(({data}) => {
+            axios.delete('/bank-detail/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
-                commit('setBankDetails', data)
+                dispatch('_get_bank_details')
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

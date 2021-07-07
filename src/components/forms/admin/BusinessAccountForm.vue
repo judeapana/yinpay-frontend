@@ -57,12 +57,12 @@
                 },
                 valid: false,
                 form: {
-                    account_type: "",
-                    account_number: "",
-                    code: "",
-                    account_name: "",
-                    currency: "",
-                    primary: false
+                    account_type: this.account?.account_type || "",
+                    account_number: this.account?.account_number || "",
+                    code: this.account?.code || "",
+                    account_name: this.account?.account_name || "",
+                    currency: this.account?.currency || "",
+                    primary: this.account?.primary || false
                 }
             }
         }

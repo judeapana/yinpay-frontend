@@ -7,8 +7,7 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
@@ -19,7 +18,8 @@
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
                             <v-card-text>
-                                <BusinessForm @on-submit="create" button="Create"></BusinessForm>
+                                <BusinessForm :business="payload" :errors="errors" @on-submit="update"
+                                              button="Update"></BusinessForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -27,12 +27,10 @@
                         <v-col cols="12" md="12">
                             <v-col cols="12" md="12">
                                 <v-card elevation="2">
-                                    <v-card-actions>
-                                        <v-btn @click="showDrawer">Add Business</v-btn>
-                                    </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getBs" :handler="_getBusiness" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -52,26 +50,61 @@
         name: 'Business',
         components: {
             BusinessForm,
-            // BusinessForm,
-            // Empty
             DataTable
         },
         data() {
             return {
                 visible: false,
-                headers: []
+                payload: null,
+
+                headers: [
+                    {text: 'Name', value: 'name'},
+                    {text: 'Address', value: 'address'},
+                    {text: 'Support Email', value: 'support_email'},
+                    {text: 'Phone Number', value: 'phone_number'},
+                    {text: 'Type', value: 'btype'},
+                    {text: 'Actions', value: 'actions', align: 'right'},
+
+                ],
+                errors: null
             }
         },
         computed: {
             ...mapGetters('business', ['getLoading', 'getBs']),
         },
         methods: {
-            ...mapActions('business', ['_getBusiness']),
-            create(payload){
-              console.log(payload)
+            ...mapActions('business', ['_getBusiness', '_putBusiness', 'setBusiness']),
+            ...mapActions('upload', ['_put_upload_img']),
+
+            update(payload) {
+                let formData = new FormData();
+                formData.append('img', payload.logo);
+                delete payload.logo
+
+                this._putBusiness({...payload, id: this.payload.id}).then((data) => {
+                    if (formData.get('img')) {
+                        let _payload = {
+                            loc: 'logo',
+                            id: data.id,
+                            img: formData
+                        }
+                        this._put_upload_img(_payload).then((data) => {
+                            this.setBusiness(data)
+                            this._getBusiness()
+                            this.visible = false
+                        })
+                    } else {
+                        this.visible = false
+                    }
+
+                }).catch((e) => {
+                    this.errors = e
+                })
+
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -80,6 +113,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

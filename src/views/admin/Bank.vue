@@ -16,8 +16,12 @@
                             <v-card-title>Banks</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <BankForm @on-submit="create" button="Create"></BankForm>
+                            <v-card-text v-if="!payload">
+                                <BankForm :errors="errors" @on-submit="create" button="Create"></BankForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <BankForm :bank="payload" :errors="errors" @on-submit="update"
+                                          button="Update"></BankForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -31,7 +35,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getBanks" :handler="_get_bank" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -56,11 +61,13 @@
         },
         data() {
             return {
+                errors: null,
                 visible: false,
                 headers: [
                     {text: 'Name Of Bank', value: 'name'},
                     {text: 'Notes', value: 'notes'},
                     {text: 'Disabled', value: 'disabled'},
+                    {text: 'Actions', value: 'actions', align: 'right'}
                 ]
             }
         },
@@ -68,15 +75,24 @@
             ...mapGetters('bank', ['getLoading', 'getBanks']),
         },
         methods: {
-            ...mapActions('bank', ['_get_bank', '_post_bank']),
+            ...mapActions('bank', ['_get_bank', '_post_bank', '_put_bank']),
             create(payload) {
                 this._post_bank(payload).then(() => {
                     this.visible = false
-                    this._get_bank()
+                }).catch((e) => {
+                    this.errors = e
                 })
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            update(payload) {
+                this._put_bank({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
+            },
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
@@ -85,6 +101,7 @@
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {

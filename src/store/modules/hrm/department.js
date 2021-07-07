@@ -46,13 +46,14 @@ const actions = {
         })))
 
     },
-    _post_department({commit}, payload) {
+    _post_department({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
             axios.post('/department/', payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_department')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -63,13 +64,14 @@ const actions = {
             })
         })))
     },
-    _put_department({commit}, payload) {
+    _put_department({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.put('/department/', payload).then(({data}) => {
+            axios.put('/department/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_department')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {
@@ -80,13 +82,14 @@ const actions = {
             })
         })))
     },
-    _delete_department({commit}, payload) {
+    _delete_department({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-            axios.delete('/department/', payload).then(({data}) => {
+            axios.delete('/department/' + payload.id, payload).then(({data}) => {
                 commit('setLoading', false)
+                dispatch('_get_department')
                 commit('app/setErrors', null, {root: true})
                 resolve(data)
             }).catch((error) => {

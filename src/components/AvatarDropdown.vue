@@ -32,7 +32,7 @@
                             <v-subheader light><small>Your Businesses</small></v-subheader>
                             <v-list-item :key="i" @click="setBusiness(item)" v-for="(item, i) in business.data">
                                 <v-list-item-avatar>
-                                    <v-img src="https://randomuser.me/api/portraits/women/56.jpg"></v-img>
+                                    <v-img :src="item.logo"></v-img>
                                 </v-list-item-avatar>
                                 <v-list-item-content>
                                     <v-list-item-title class="text-sm-subtitle-2">{{item.name}}

@@ -7,17 +7,22 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
+                <v-tab>Details</v-tab>
                 <v-tab-item>
                     <v-dialog max-width="690"
                               v-if="visible"
                               v-model="visible">
                         <v-card>
-                            <v-card-title>Create User Grouping</v-card-title>
+                            <v-card-title>User Grouping</v-card-title>
                             <v-card-subtitle>Please provide the following information to complete the form
                             </v-card-subtitle>
-                            <v-card-text>
-                                <PersonnelGroupForm @on-submit="create" button="Create"></PersonnelGroupForm>
+                            <v-card-text v-if="!payload">
+                                <PersonnelGroupForm :errors="errors" @on-submit="create"
+                                                    button="Create"></PersonnelGroupForm>
+                            </v-card-text>
+                            <v-card-text v-else>
+                                <PersonnelGroupForm :errors="errors" :personnel_group="payload" @on-submit="update"
+                                                    button="Update"></PersonnelGroupForm>
                             </v-card-text>
                         </v-card>
                     </v-dialog>
@@ -31,7 +36,8 @@
                                     </v-card-actions>
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getPg" :handler="_get_personnel_group" :headers="headers"
-                                               :loading="getLoading"></DataTable>
+                                               :loading="getLoading"
+                                               @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -55,7 +61,9 @@
         },
         data() {
             return {
+                payload: null,
                 visible: false,
+                errors: null,
                 headers: [
                     {text: 'Name', align: 'start', value: 'name',},
                     {text: 'Category', align: 'start', value: 'category',},
@@ -69,23 +77,33 @@
             ...mapGetters('personnel_group', ['getLoading', 'getPg']),
         },
         methods: {
-            ...mapActions('personnel_group', ['_get_personnel_group', '_post_personnel_group']),
+            ...mapActions('personnel_group', ['_get_personnel_group', '_post_personnel_group', '_put_personnel_group']),
             create(payload) {
                 this._post_personnel_group(payload).then(() => {
                     this.visible = false
-                    this._get_personnel_group()
+                }).catch((e) => {
+                    this.errors = e
                 })
             },
-            OnUpdate(pk) {
-                console.log(pk)
+            OnUpdate(payload) {
+                this.payload = payload
+                this.visible = true
             },
             OnDelete(pk) {
                 console.log(pk)
+            },
+            update(payload) {
+                this._put_personnel_group({...payload, id: this.payload.id}).then(() => {
+                    this.visible = false
+                }).catch((e) => {
+                    this.errors = e
+                })
             },
             afterVisibleChange(val) {
                 console.log('visible', val);
             },
             showDrawer() {
+                this.payload = null
                 this.visible = true;
             },
             onClose() {
