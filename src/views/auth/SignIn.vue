@@ -42,16 +42,16 @@
                     let user = getCurrentUser()
                     this.$message.loading(`logging you in [${user.username}]`, 1).then(() => {
                         let returnEp = this.$route.query?.return || null
-                        this._getBusiness({page: -1}).then((business) => {
-                            if (business.data.length <= 0) {
-                                this.$message.warning('No Business found')
-                            } else {
-                                if (!this.getCurrentBs)
-                                    this.setBusiness(business.data[0])
-                            }
-                        }).catch(() => {
-
-                        })
+                        // this._getBusiness({page: -1}).then((business) => {
+                        //     if (business.data.length <= 0) {
+                        //         this.$message.warning('No Business found')
+                        //     } else {
+                        //         if (!this.getCurrentBs)
+                        //             this.setBusiness(business.data[0])
+                        //     }
+                        // }).catch(() => {
+                        //
+                        // })
                         if (!returnEp) {
                             this.$router.push({name: 'admin_dashboard'})
                         } else {

@@ -24,15 +24,15 @@
         data() {
             return {
                 tabs: [
-                    {icon: 'mdi-account', name: 'user-all', title: 'Users'},
-                    {icon: 'mdi-account', name: 'user-bank', title: 'Bank'},
-                    {icon: 'mdi-account', name: 'user-docs', title: 'Docs'},
-                    {icon: 'mdi-account', name: 'next-of-kin', title: 'Next-Of-Kin'},
-                    {icon: 'mdi-account', name: 'daily_rate', title: 'Daily Rate'},
-                    {icon: 'mdi-account', name: 'earnings', title: 'Earnings'},
-                    {icon: 'mdi-account', name: 'user_attendance', title: 'Attendance'},
-                    {icon: 'mdi-account', name: 'deductions', title: 'Deduction'},
-                    {icon: 'mdi-account', name: 'leaves', title: 'Leaves'},
+                    {icon: 'mdi-account-plus', name: 'user-all', title: 'Users'},
+                    {icon: 'mdi-bank', name: 'user-bank', title: 'Bank'},
+                    {icon: 'mdi-file', name: 'user-docs', title: 'Docs'},
+                    {icon: 'mdi-account-multiple-outline', name: 'next-of-kin', title: 'Next-Of-Kin'},
+                    {icon: 'mdi-cash-multiple', name: 'daily_rate', title: 'Daily Rate'},
+                    {icon: 'mdi-cash', name: 'earnings', title: 'Earnings'},
+                    {icon: 'mdi-apps', name: 'user_attendance', title: 'Attendance'},
+                    {icon: 'mdi-trending-down', name: 'deductions', title: 'Deduction'},
+                    {icon: 'mdi-walk', name: 'leaves', title: 'Leaves'},
                 ]
             }
         },

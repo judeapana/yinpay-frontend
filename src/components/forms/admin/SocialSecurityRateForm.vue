@@ -2,12 +2,12 @@
     <v-form @submit.prevent="$emit('on-submit',form)" ref="form" v-model="valid">
         <v-select :items="periods" :rules="rules.period_id" item-text="name" item-value="id" label="Period"
                   v-model="form.period_id"></v-select>
-        <v-text-field :rules="rules.emp_rate" label="Employee Rate" type="number"
+        <v-text-field min="0" :rules="rules.emp_rate" label="Employee Rate" type="number"
                       v-model.number="form.emp_rate"></v-text-field>
-        <v-text-field :rules="rules.emp_rate" label="Employer Rate" type="number"
+        <v-text-field min="0" :rules="rules.emp_rate" label="Employer Rate" type="number"
                       v-model.number="form.emper_rate"></v-text-field>
-        <v-text-field :rules="rules.tier1" label="Tier 1" type="number" v-model.number="form.tier1"></v-text-field>
-        <v-text-field :rules="rules.tier2" label="Tier 2" type="number" v-model.number="form.tier2"></v-text-field>
+        <v-text-field min="0" :rules="rules.tier1" label="Tier 1" type="number" v-model.number="form.tier1"></v-text-field>
+        <v-text-field  min="0" :rules="rules.tier2" label="Tier 2" type="number" v-model.number="form.tier2"></v-text-field>
         <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>
     </v-form>
 </template>

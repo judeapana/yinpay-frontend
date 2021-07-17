@@ -1,25 +1,50 @@
 <template>
-    <v-data-table :headers="headers" :items="_eval('data?.data')"
-                  :items-per-page="_eval('data?.pagination.size')"
+    <v-data-table :headers="headers" :items="_eval('data?.data')" :items-per-page="_eval('data?.pagination.size')"
                   :loading="loading"
                   :options.sync="options"
-                  :server-items-length="_eval('data?.pagination.totalElements')" class="elevation-1">
-        <template v-slot:item.switch="{item}">
-            <v-btn :text="item.disabled"></v-btn>
+                  :server-items-length="_eval('data?.pagination.totalElements')"
+                  @click:row="rowClicked" class="elevation-1">
+        <template v-slot:no-data>
+            <div class="pt-5">
+                <a-empty/>
+            </div>
         </template>
-        <template v-slot:item.actions="{ item }">
-            <v-btn @click="$emit('on-edit',item)" class="mr-2" color="indigo" depressed elevation="4"
-                   fab outlined
-                   x-small>
-                <v-icon class="" small>mdi-pencil</v-icon>
-            </v-btn>
 
-            <v-btn class="mr-2" :href="item[has_file]" color="green" elevation="4" fab outlined v-if="has_file" x-small>
-                <v-icon small>mdi-file</v-icon>
-            </v-btn>
-            <v-btn  color="red" elevation="4" fab outlined x-small>
-                <v-icon @click="$emit('on-delete',item)" small>mdi-delete</v-icon>
-            </v-btn>
+        <template v-slot:item.actions="{ item }">
+            <v-menu bottom left>
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn icon v-bind="attrs" v-on="on">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                </template>
+                <v-card>
+                    <v-list-item-content class="justify-center">
+                        <v-list tile>
+                            <v-list-item-group color="primary">
+
+                                <v-list-item @click="$emit('on-edit',item)">
+                                    <v-list-item-title>
+                                        <v-icon small>mdi-pencil</v-icon>
+                                        Edit
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item @click="$emit('on-delete',item)">
+                                    <v-list-item-title>
+                                        <v-icon small>mdi-delete</v-icon>
+                                        Delete
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item :href="item[has_file]" target="_blank" v-if="has_file">
+                                    <v-list-item-title>
+                                        <v-icon small>mdi-file</v-icon>
+                                        File
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </v-list-item-group>
+                        </v-list>
+                    </v-list-item-content>
+                </v-card>
+            </v-menu>
         </template>
     </v-data-table>
 </template>
@@ -53,7 +78,11 @@
             },
         },
         methods: {
-            _eval: parameter => eval('this.' + parameter)
+            _eval: parameter => eval('this.' + parameter),
+            rowClicked(item) {
+                this.$emit('on-edit', item)
+            }
+
         },
         name: 'DataTable',
         mounted() {

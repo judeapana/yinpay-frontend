@@ -19,7 +19,7 @@
                     v-model="form.date"
             ></v-date-picker>
         </v-menu>
-        <a :href="doc.doc" v-if="available_file">View Current File</a>
+        <a target="_blank" :href="doc.doc" v-if="available_file">View Current File</a>
         <v-file-input :rules="rules.doc" label="Document"
                       v-model="form.doc"></v-file-input>
         <v-textarea :rules="rules.notes" label="Notes" rows="3" v-model="form.notes"></v-textarea>

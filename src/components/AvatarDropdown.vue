@@ -30,7 +30,8 @@
                     <v-list tile>
                         <v-list-item-group color="primary" v-model="selectedItem">
                             <v-subheader light><small>Your Businesses</small></v-subheader>
-                            <v-list-item :key="i" @click="setBusiness(item)" v-for="(item, i) in business.data">
+                            <v-list-item :disabled="getCurrentBs.id===item.id" :key="i" @click="setBusiness(item)"
+                                         v-for="(item, i) in business.data">
                                 <v-list-item-avatar>
                                     <v-img :src="item.logo"></v-img>
                                 </v-list-item-avatar>
@@ -67,11 +68,7 @@
                 selectedItem: -1,
                 page: 1,
                 business: [],
-                i: [
-                    {text: 'My Files', icon: 'mdi-folder'},
-                    {text: 'Shared with me', icon: 'mdi-account-multiple'},
-                    {text: 'Starred', icon: 'mdi-star'},
-                ],
+
             }
         },
         methods: {
@@ -95,7 +92,7 @@
             }
         },
         computed: {
-            ...mapGetters('business', ['getLoading']),
+            ...mapGetters('business', ['getLoading', 'getCurrentBs']),
             user() {
                 return getCurrentUser()
             }

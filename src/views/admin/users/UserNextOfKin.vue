@@ -23,6 +23,7 @@
             </v-card-actions>
             <v-card-subtitle></v-card-subtitle>
             <DataTable :data="getNextOfKin" :handler="_get_next_of_kin" :headers="headers" :loading="getLoading"
+                       @on-delete="OnDelete"
                        @on-edit="OnUpdate"></DataTable>
         </v-card>
 
@@ -59,7 +60,7 @@
             ...mapGetters('next_of_kin', ['getLoading', 'getNextOfKin']),
         },
         methods: {
-            ...mapActions('next_of_kin', ['_get_next_of_kin', '_post_next_of_kin', '_put_next_of_kin']),
+            ...mapActions('next_of_kin', ['_get_next_of_kin', '_post_next_of_kin', '_put_next_of_kin', '_delete_next_of_kin']),
             create(payload) {
                 this._post_next_of_kin(payload).then(() => {
                     this.visible = false
@@ -78,8 +79,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_next_of_kin(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

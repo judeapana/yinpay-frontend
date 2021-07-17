@@ -11,7 +11,7 @@
                         <UserForm :errors="errors" @on-submit="create" button="Create"></UserForm>
                     </v-card-text>
                     <v-card-text v-else>
-                        <UserForm  :errors="errors" :user="payload" @on-submit="update" button="Update"></UserForm>
+                        <UserForm :errors="errors" :user="payload" @on-submit="update" button="Update"></UserForm>
                     </v-card-text>
                 </v-card>
             </v-dialog>
@@ -64,7 +64,7 @@
             }
         },
         methods: {
-            ...mapActions('user', ['_get_user', '_post_user', '_put_user']),
+            ...mapActions('user', ['_get_user', '_post_user', '_put_user', '_delete_user']),
             create(payload) {
                 this._post_user(payload).then(() => {
                     this.visible = false
@@ -83,8 +83,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_user(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

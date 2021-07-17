@@ -7,7 +7,7 @@
         <v-select :items="deduction_groups" :rules="rules.deduction_group_id" item-text="name" item-value="id"
                   label="Deduction Group"
                   v-model="form.deduction_group_id"></v-select>
-        <v-text-field :rules="rules.rate" label="Rate" type="number" v-model.number="form.rate"></v-text-field>
+        <v-text-field min="0" :rules="rules.rate" label="Rate" type="number" v-model.number="form.rate"></v-text-field>
         <v-switch :rules="rules.disabled" label="Disabled" v-model="form.disabled"></v-switch>
         <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>
     </v-form>

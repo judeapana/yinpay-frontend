@@ -37,6 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getPg" :handler="_get_personnel_group" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -77,7 +78,7 @@
             ...mapGetters('personnel_group', ['getLoading', 'getPg']),
         },
         methods: {
-            ...mapActions('personnel_group', ['_get_personnel_group', '_post_personnel_group', '_put_personnel_group']),
+            ...mapActions('personnel_group', ['_get_personnel_group', '_post_personnel_group', '_put_personnel_group', '_delete_personnel_group']),
             create(payload) {
                 this._post_personnel_group(payload).then(() => {
                     this.visible = false
@@ -89,8 +90,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_personnel_group(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             update(payload) {
                 this._put_personnel_group({...payload, id: this.payload.id}).then(() => {

@@ -4,7 +4,7 @@
         <v-select :items="personnel_group" :rules="rules.personnel_group_id" item-text="name" item-value="id"
                   label="Personnel Group"
                   v-model="form.personnel_group_id"></v-select>
-        <v-text-field :rules="rules.amount" label="Amount" v-model="form.amount"></v-text-field>
+<!--        <v-text-field :rules="rules.amount" label="Amount" v-model="form.amount"></v-text-field>-->
         <v-text-field :rules="rules.notes" label="Notes" v-model="form.notes"></v-text-field>
         <v-switch :rules="rules.per_day" hint="Activate this mean the earning should be taken or calculated daily"
                   label="Per Day" v-model="form.per_day"></v-switch>
@@ -47,7 +47,7 @@
                 rules: {
                     name: [this.api('name'), this.required()],
                     personnel_group_id: [this.api('personnel_group_id'), this.required()],
-                    amount: [this.api('amount'), this.required()],
+                    // amount: [this.api('amount'), this.required()],
                     notes: [this.api('notes'), this.required()],
                     per_day: [this.api('per_day')],
                     allowance: [this.api('allowance')]
@@ -56,7 +56,7 @@
                 form: {
                     name: this.earning?.name || "",
                     personnel_group_id: this.earning?.personnel_group_id || '',
-                    amount: this.earning?.amount || "",
+                    // amount: this.earning?.amount || "",
                     disabled: this.earning?.disabled || false,
                     notes: this.earning?.notes || "",
                     per_day: this.earning?.per_day || false,

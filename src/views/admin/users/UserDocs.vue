@@ -24,8 +24,9 @@
                             <v-btn @click="showDrawer">Add Document</v-btn>
                         </v-card-actions>
                         <v-card-subtitle></v-card-subtitle>
-                        <DataTable has_file="doc" :data="getDocs" :handler="_get_docs" :headers="headers" :loading="getLoading"
-                                   @on-edit="OnUpdate"></DataTable>
+                        <DataTable :data="getDocs" :handler="_get_docs" :headers="headers" :loading="getLoading"
+                                   @on-delete="OnDelete" @on-edit="OnUpdate"
+                                   has_file="doc"></DataTable>
                     </v-card>
                 </v-col>
             </v-col>
@@ -61,7 +62,7 @@
             ...mapGetters('docs', ['getLoading', 'getDocs']),
         },
         methods: {
-            ...mapActions('docs', ['_get_docs', '_post_docs', '_put_docs']),
+            ...mapActions('docs', ['_get_docs', '_post_docs', '_put_docs', '_delete_docs']),
             ...mapActions('upload', ['_post_upload_file', '_put_upload_file']),
             create(payload) {
                 let formData = new FormData();
@@ -106,8 +107,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_docs(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

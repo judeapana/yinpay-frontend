@@ -26,8 +26,7 @@
                 const {response: {status}} = error;
                 if (status === 401) {
                     logoutUser()
-                    window.location.reload()
-                    return
+                    return Promise.reject(error)
                 }
                 return Promise.reject(error)
             })

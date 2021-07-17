@@ -37,6 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getBa" :handler="_get_business_account" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -79,7 +80,7 @@
             ...mapGetters('business_account', ['getLoading', 'getBa']),
         },
         methods: {
-            ...mapActions('business_account', ['_get_business_account', '_post_business_account', '_put_business_account']),
+            ...mapActions('business_account', ['_get_business_account', '_post_business_account', '_put_business_account', '_delete_business_account']),
             create(payload) {
                 this._post_business_account(payload).then(() => {
                     this.visible = false
@@ -99,8 +100,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_business_account(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

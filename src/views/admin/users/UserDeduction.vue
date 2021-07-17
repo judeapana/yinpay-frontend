@@ -27,6 +27,7 @@
                         <v-card-subtitle></v-card-subtitle>
                         <DataTable :data="getUserDeduction" :handler="_get_user_deduction" :headers="headers"
                                    :loading="getLoading"
+                                   @on-delete="OnDelete"
                                    @on-edit="OnUpdate"></DataTable>
                     </v-card>
                 </v-col>
@@ -66,7 +67,7 @@
             ...mapGetters('user_deduction', ['getLoading', 'getUserDeduction']),
         },
         methods: {
-            ...mapActions('user_deduction', ['_get_user_deduction', '_post_user_deduction', '_put_user_deduction']),
+            ...mapActions('user_deduction', ['_get_user_deduction', '_post_user_deduction', '_put_user_deduction', '_delete_user_deduction']),
             create(payload) {
                 this._post_user_deduction(payload).then(() => {
                     this.visible = false
@@ -85,8 +86,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_user_deduction(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

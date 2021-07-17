@@ -35,6 +35,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getWorkingDays" :handler="_get_working_days" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -77,7 +78,7 @@
             ...mapGetters('working_days', ['getLoading', 'getWorkingDays']),
         },
         methods: {
-            ...mapActions('working_days', ['_get_working_days', '_post_working_days', '_put_working_days']),
+            ...mapActions('working_days', ['_get_working_days', '_post_working_days', '_put_working_days', '_delete_working_days']),
             create(payload) {
                 this._post_working_days(payload).then(() => {
                     this.visible = false
@@ -96,8 +97,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_working_days(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

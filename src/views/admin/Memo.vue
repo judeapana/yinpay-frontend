@@ -18,6 +18,7 @@
                                 <v-card-subtitle></v-card-subtitle>
                                 <DataTable :data="getMemos" :handler="_get_memo" :headers="headers"
                                            :loading="getLoading"
+                                           @on-delete="OnDelete"
                                            @on-edit="OnUpdate"></DataTable>
                             </v-card>
                         </v-col>
@@ -73,7 +74,7 @@
             ...mapGetters('memo', ['getLoading', 'getMemos']),
         },
         methods: {
-            ...mapActions('memo', ['_get_memo', '_post_memo', '_put_memo']),
+            ...mapActions('memo', ['_get_memo', '_post_memo', '_put_memo', '_delete_memo']),
             create(payload) {
                 this._post_memo(payload).then(() => {
                     this.visible = false
@@ -92,8 +93,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_memo(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

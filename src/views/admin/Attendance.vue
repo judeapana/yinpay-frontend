@@ -37,7 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getUserAttendance" :handler="_get_attendance" :headers="headers"
                                                :loading="getLoading"
-                                               @on-edit="OnUpdate"></DataTable>
+                                               @on-delete="OnDelete" @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
                         </v-col>
@@ -77,7 +77,7 @@
             ...mapGetters('attendance', ['getLoading', 'getUserAttendance']),
         },
         methods: {
-            ...mapActions('attendance', ['_get_attendance', '_post_attendance', '_put_attendance']),
+            ...mapActions('attendance', ['_get_attendance', '_post_attendance', '_put_attendance', '_delete_attendance']),
             create(payload) {
                 this._post_attendance(payload).then(() => {
                     this.visible = false
@@ -96,8 +96,21 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_attendance(payload).catch(() => {
+                            this.$error({
+                                title: "Error Occurred",
+                                content: "Sorry but an error occurred, we are working to fix this issue.Thank You"
+                            })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

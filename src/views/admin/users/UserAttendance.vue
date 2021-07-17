@@ -24,6 +24,7 @@
             <v-card-subtitle></v-card-subtitle>
             <DataTable :data="getUserAttendance" :handler="_get_user_attendance" :headers="headers"
                        :loading="getLoading"
+                       @on-delete="OnDelete"
                        @on-edit="OnUpdate"></DataTable>
         </v-card>
 
@@ -62,7 +63,7 @@
             ...mapGetters('user_attendance', ['getLoading', 'getUserAttendance']),
         },
         methods: {
-            ...mapActions('user_attendance', ['_get_user_attendance', '_post_user_attendance', '_put_user_attendance']),
+            ...mapActions('user_attendance', ['_get_user_attendance', '_post_user_attendance', '_put_user_attendance', '_delete_attendance']),
             create(payload) {
                 this._post_user_attendance(payload).then(() => {
                     this.visible = false
@@ -81,8 +82,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_attendance(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

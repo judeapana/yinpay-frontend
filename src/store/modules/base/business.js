@@ -5,7 +5,8 @@ const state = {
     errors: null,
     msg: null,
     currentBs: null,
-    bs: null
+    bs: null,
+    settings: {}
 }
 const getters = {
     getLoading(state) {
@@ -16,6 +17,9 @@ const getters = {
     },
     getMsg(state) {
         return state.msg
+    },
+    getSettings() {
+        return state.settings
     },
     getCurrentBs(state) {
         return state.currentBs
@@ -40,41 +44,50 @@ const mutations = {
     },
     setBs(state, payload) {
         state.bs = payload
+    },
+    setSettings(state, payload) {
+        state.settings = payload
     }
 }
 
 const actions = {
     setBusiness({commit, dispatch}, payload) {
+        commit('setLoading', true)
+        if (payload != null) {
+            Promise.all([
+                dispatch('user/_get_user', {}, {root: true}),
+                dispatch('business/_getBusiness', {}, {root: true}),
+                dispatch('business_account/_get_business_account', {}, {root: true}),
+                dispatch('attendance/_get_attendance', {}, {root: true}),
+                dispatch('bank/_get_bank', {}, {root: true}),
+                dispatch('bank_detail/_get_bank_details', {}, {root: true}),
+                dispatch('department/_get_department', {}, {root: true}),
+                dispatch('docs/_get_docs', {}, {root: true}),
+                dispatch('leave/_get_leaves', {}, {root: true}),
+                dispatch('memo/_get_memo', {}, {root: true}),
+                dispatch('next_of_kin/_get_next_of_kin', {}, {root: true}),
+                dispatch('personnel_group/_get_personnel_group', {}, {root: true}),
+                dispatch('daily_rate/_get_daily_rate', {}, {root: true}),
+                dispatch('deduction_group/_get_deduction_group', {}, {root: true}),
+                dispatch('period/_get_period', {}, {root: true}),
+                dispatch('ssr/_get_ssr', {}, {root: true}),
+                dispatch('tax/_get_tax', {}, {root: true}),
+                dispatch('user_attendance/_get_user_attendance', {}, {root: true}),
+                dispatch('user_deduction/_get_user_deduction', {}, {root: true}),
+                dispatch('user_earning/_get_user_earning', {}, {root: true}),
+                dispatch('working_days/_get_working_days', {}, {root: true}),
+                dispatch('_getSetting', {}, {root: true}),
+
+            ]).then(() => {
+                commit('app/setMsg', {message: `Your Business Account has been Changed to ${payload.name}`}, {root: true})
+                commit('setLoading', false)
+            }).catch(() => {
+                commit('app/setErrors', {message: `Failed to has been Changed to ${payload.name}`}, {root: true})
+                commit('setLoading', false)
+            })
+        }
+        commit('setLoading', false)
         commit('setCurrentBs', payload)
-        Promise.all([
-            dispatch('user/_get_user', {}, {root: true}),
-            dispatch('business/_getBusiness', {}, {root: true}),
-            dispatch('business_account/_get_business_account', {}, {root: true}),
-            dispatch('attendance/_get_attendance', {}, {root: true}),
-            dispatch('bank/_get_bank', {}, {root: true}),
-            dispatch('bank_detail/_get_bank_details', {}, {root: true}),
-            dispatch('department/_get_department', {}, {root: true}),
-            dispatch('docs/_get_docs', {}, {root: true}),
-            dispatch('leave/_get_leaves', {}, {root: true}),
-            dispatch('memo/_get_memo', {}, {root: true}),
-            dispatch('next_of_kin/_get_next_of_kin', {}, {root: true}),
-            dispatch('personnel_group/_get_personnel_group', {}, {root: true}),
-            dispatch('daily_rate/_get_daily_rate', {}, {root: true}),
-            dispatch('deduction_group/_get_deduction_group', {}, {root: true}),
-            dispatch('period/_get_period', {}, {root: true}),
-            dispatch('ssr/_get_ssr', {}, {root: true}),
-            dispatch('tax/_get_tax', {}, {root: true}),
-            dispatch('user_attendance/_get_user_attendance', {}, {root: true}),
-            dispatch('user_deduction/_get_user_deduction', {}, {root: true}),
-            dispatch('user_earning/_get_user_earning', {}, {root: true}),
-            dispatch('working_days/_get_working_days', {}, {root: true}),
-
-        ]).then(() => {
-            commit('app/setMsg', {message: `Your Business Account has been Changed to ${payload.name}`}, {root: true})
-        }).catch(() => {
-            commit('app/setErrors', {message: `Failed to has been Changed to ${payload.name}`}, {root: true})
-
-        })
     },
     _getBusiness({commit}, payload) {
         commit('setLoading', true)
@@ -99,7 +112,6 @@ const actions = {
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
         return new Promise((((resolve, reject) => {
-
             axios.post(`/business/`, payload).then(({data}) => {
                 commit('app/setMsg', data, {root: true})
                 commit('setLoading', false)
@@ -135,7 +147,25 @@ const actions = {
             })
         })))
     },
-    _deleteBusiness({commit}, payload) {
+    _getSetting({commit}) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.get('/setting/').then(({data}) => {
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                commit('setSettings', data)
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
+    },
+    _deleteBusiness({commit, dispatch}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -145,6 +175,26 @@ const actions = {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
                 commit('setMsg', {message: 'Business has been deleted'})
+                dispatch('_getBusiness')
+                resolve(data)
+            }).catch((error) => {
+                commit('app/setErrors', error.response.data, {root: true})
+                commit('setLoading', false)
+                commit('app/setMsg', null, {root: true})
+                reject(error.response.data)
+            })
+        })))
+    },
+    _putSetting({commit}, payload) {
+        commit('setLoading', true)
+        commit('app/setErrors', null, {root: true})
+        commit('app/setMsg', null, {root: true})
+        return new Promise((((resolve, reject) => {
+            axios.put(`/setting/`, payload).then(({data}) => {
+                commit('app/setMsg', data, {root: true})
+                commit('setLoading', false)
+                commit('app/setErrors', null, {root: true})
+                commit('setMsg', {message: 'Settings Updated'})
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

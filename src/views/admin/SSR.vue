@@ -37,6 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getSsr" :handler="_get_ssr" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -79,7 +80,7 @@
             ...mapGetters('ssr', ['getLoading', 'getSsr']),
         },
         methods: {
-            ...mapActions('ssr', ['_get_ssr', '_post_ssr', '_put_ssr']),
+            ...mapActions('ssr', ['_get_ssr', '_post_ssr', '_put_ssr', '_delete_ssr']),
             create(payload) {
                 this._post_ssr(payload).then(() => {
                     this.visible = false
@@ -98,8 +99,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_ssr(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

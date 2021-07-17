@@ -7,7 +7,7 @@
                   v-model="form.period_id"></v-select>
         <v-select :items="personnel_groups" :rules="rules.personnel_group_id" item-text="name" item-value="id"
                   label="Personnel Group" v-model="form.personnel_group_id"/>
-        <v-text-field :disabled="automate" :rules="rules.rate" label="Rate" v-model="form.rate"></v-text-field>
+        <v-text-field min="0" :disabled="automate" :rules="rules.rate" label="Rate" v-model.number="form.rate"></v-text-field>
         <v-switch :rules="rules.disabled" label="Disabled" v-model="form.disabled"></v-switch>
 
         <v-textarea :rules="rules.notes" label="Notes" v-model="form.notes"></v-textarea>

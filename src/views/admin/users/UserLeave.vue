@@ -26,6 +26,7 @@
                         </v-card-actions>
                         <v-card-subtitle></v-card-subtitle>
                         <DataTable :data="getLeaves" :handler="_get_leaves" :headers="headers" :loading="getLoading"
+                                   @on-delete="OnDelete"
                                    @on-edit="OnUpdate"></DataTable>
                     </v-card>
                 </v-col>
@@ -67,7 +68,7 @@
             ...mapGetters('leave', ['getLoading', 'getLeaves']),
         },
         methods: {
-            ...mapActions('leave', ['_get_leaves', '_post_leaves', '_put_leaves']),
+            ...mapActions('leave', ['_get_leaves', '_post_leaves', '_put_leaves', '_delete_leave']),
             create(payload) {
                 this._post_leaves(payload).then(() => {
                     this.visible = false
@@ -86,8 +87,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items? ',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_leave(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

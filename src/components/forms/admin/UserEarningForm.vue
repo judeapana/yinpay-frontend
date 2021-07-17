@@ -8,7 +8,7 @@
 
         <v-select :items="earning_groups" item-text="name" item-value="id" label="Earning Group"
                   v-model="form.earning_group_id"></v-select>
-        <v-text-field label="Rate" type="number" v-model="form.rate"></v-text-field>
+        <v-text-field min="0" label="Rate" type="number" v-model.number="form.rate"></v-text-field>
         <v-switch label="Disabled" v-model="form.disabled"></v-switch>
         <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>
     </v-form>

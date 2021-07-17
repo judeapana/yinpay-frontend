@@ -43,7 +43,7 @@ const actions = {
                 commit('app/setMsg', null, {root: true})
                 commit('app/setErrors', error.response.data, {root: true})
                 commit('setLoading', false)
-                reject(error.response.data)
+                reject(false)
             })
         }))
     },
@@ -124,7 +124,7 @@ const actions = {
                 commit('setLoading', false)
                 commit('app/setMsg', null, {root: true})
                 logoutUser()
-                reject(error.response.data)
+                reject(false)
             })
         })))
     },

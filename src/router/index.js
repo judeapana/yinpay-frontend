@@ -43,7 +43,16 @@ import UserAttendance from "../views/admin/users/UserAttendance";
 import UserDeduction from "../views/admin/users/UserDeduction";
 import UserLeave from "../views/admin/users/UserLeave";
 import UserDailyRate from "../views/admin/users/UserDailyRate";
+import Profile from "../views/admin/Profile";
 import axios from "axios";
+import Reports from "../views/admin/Reports";
+import PayrollReport from "../views/admin/reports/PayrollReport";
+import PayslipReport from "../views/admin/reports/PayslipReport";
+import AttendanceReport from "../views/admin/reports/AttendanceReport";
+import DeductionsReport from "../views/admin/reports/DeductionsReport";
+import LeavesReport from "../views/admin/reports/LeavesReport";
+import SsnitReport from "../views/admin/reports/SsnitReport";
+import EarningsReport from "../views/admin/reports/EarningsReport";
 
 Vue.use(VueRouter)
 
@@ -116,6 +125,23 @@ export const routes = [
             {path: 'banks', name: 'bank', component: Bank, meta: {loginRequired: true},},
             {path: 'personnel-group', name: 'personnel-group', component: PersonnelGroup, meta: {loginRequired: true},},
             {path: 'settings', name: 'settings', component: Settings, meta: {loginRequired: true},},
+            {path: 'profile', name: 'profile', component: Profile, meta: {loginRequired: true}},
+            {
+                path: 'reports',
+                name: 'reports',
+                redirect: 'reports/payroll',
+                component: Reports,
+                meta: {loginRequired: true},
+                children: [
+                    {path: "payslip", name: "payslip-report", component: PayslipReport},
+                    {path: "payroll", name: "payroll-report", component: PayrollReport},
+                    {path: "earning", name: "earning-report", component: EarningsReport},
+                    {path: "attendance", name: "attendance-report", component: AttendanceReport},
+                    {path: "deduction", name: "deduction-report", component: DeductionsReport},
+                    {path: "leaves", name: "leaves-report", component: LeavesReport},
+                    {path: "ssnit", name: "ssnit-report", component: SsnitReport},
+                ]
+            },
             {path: 'memos', name: 'memo', component: Memo, meta: {loginRequired: true},},
             {
                 path: 'users', name: 'user', component: User, redirect: 'users/all',
@@ -191,10 +217,8 @@ router.beforeEach((to, from, next) => {
         Vue.prototype.$message.error('You have to login to access this page')
         return next({name: 'SignIn', query: {return: to.path}})
     }
-
     store.dispatch('app/_loading', true)
     next()
-
 })
 
 router.afterEach(() => {
@@ -203,9 +227,11 @@ router.afterEach(() => {
 
 
 axios.interceptors.request.use((config) => {
-    if (store.state.business.currentBs?.id && store.state['auth'].loggedIn)
+
+    if (store.state.business.currentBs?.id && store.state['auth'].loggedIn) {
         if (!config.url.includes('business'))
             config.params = {...config.params, 'selector': store.state.business.currentBs.id}
+    }
     return config
 }, error => {
     return Promise.reject(error)

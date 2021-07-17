@@ -34,6 +34,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getDepartments" :handler="_get_department" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -77,7 +78,7 @@
             ...mapGetters('department', ['getLoading', 'getDepartments']),
         },
         methods: {
-            ...mapActions('department', ['_get_department', '_post_department', '_put_department']),
+            ...mapActions('department', ['_get_department', '_post_department', '_put_department', '_delete_department']),
             OnUpdate(payload) {
                 this.payload = payload
                 this.visible = true
@@ -96,8 +97,18 @@
                     this.errors = e
                 })
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_department(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

@@ -35,6 +35,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getTax" :handler="_get_tax" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -78,7 +79,7 @@
             ...mapGetters('tax', ['getLoading', 'getTax']),
         },
         methods: {
-            ...mapActions('tax', ['_get_tax', '_post_tax', '_put_tax']),
+            ...mapActions('tax', ['_get_tax', '_post_tax', '_put_tax', '_delete_tax']),
             create(payload) {
                 this._post_tax(payload).then(() => {
                     this.visible = false
@@ -97,8 +98,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_tax(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

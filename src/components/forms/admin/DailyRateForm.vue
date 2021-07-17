@@ -4,13 +4,13 @@
                   v-model="form.period_id"></v-select>
         <v-select :items="users" :rules="rules.user_meta_id" item-text="username" item-value="user_meta.id" label="User"
                   v-model="form.user_meta_id"></v-select>
-        <v-text-field :rules="rules.main_amount" label="Main Amount" type="number"
+        <v-text-field min="0"  :rules="rules.main_amount" label="Main Amount" type="number"
                       v-model="form.main_amount"></v-text-field>
-        <v-text-field :rules="rules.emergency_amount" label="Emergency Amount" type="number"
+        <v-text-field min="0" :rules="rules.emergency_amount" label="Emergency Amount" type="number"
                       v-model="form.emergency_amount"></v-text-field>
         <v-switch :rules="rules.disabled" label="Disabled" v-model="form.disabled"></v-switch>
         <v-textarea :rules="rules.notes" label="Notes" rows="2" v-model="form.notes"></v-textarea>
-        <v-btn type="submit" v-text="button"></v-btn>
+        <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>
 
     </v-form>
 </template>

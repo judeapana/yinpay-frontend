@@ -7,8 +7,8 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
+                <v-tab>Payroll</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
@@ -37,6 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getPeriod" :handler="_get_period" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -79,7 +80,7 @@
             ...mapGetters('period', ['getLoading', 'getPeriod']),
         },
         methods: {
-            ...mapActions('period', ['_get_period', '_post_period', '_put_period']),
+            ...mapActions('period', ['_get_period', '_post_period', '_put_period', '_delete_period']),
             create(payload) {
                 this._post_period(payload).then(() => {
                     this.visible = false
@@ -98,8 +99,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_period(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

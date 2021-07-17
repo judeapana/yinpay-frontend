@@ -5,8 +5,9 @@
         <v-select :items="personnel_groups" :rules="rules.personnel_group_id" item-text="name" item-value="id"
                   label="Personnel Group"
                   v-model="form.personnel_group_id"></v-select>
-        <v-text-field :rules="rules.days" label="Days" type="number" v-model="form.days"></v-text-field>
-        <v-text-field :rules="rules.hours" label="Hours" type="number" v-model="form.hours"></v-text-field>
+        <v-text-field :rules="rules.days" label="Days" min="0" type="number" v-model.number="form.days"></v-text-field>
+        <v-text-field :rules="rules.hours" label="Hours" min="0" type="number"
+                      v-model.number="form.hours"></v-text-field>
         <v-switch :rules="rules.disabled" label="Disabled" v-model="form.disabled"></v-switch>
         <v-textarea :rules="rules.notes" label="Notes" v-model="form.notes"></v-textarea>
         <v-btn :disabled="!valid" type="submit" v-text="button"></v-btn>

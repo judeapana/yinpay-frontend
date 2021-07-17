@@ -7,8 +7,7 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-tabs>
-                <v-tab>All</v-tab>
-                <v-tab>Primary</v-tab>
+                <v-tab>Details</v-tab>
 
                 <v-tab-item>
                     <v-dialog max-width="690"
@@ -38,6 +37,7 @@
                                     <v-card-subtitle></v-card-subtitle>
                                     <DataTable :data="getDg" :handler="_get_deduction_group" :headers="headers"
                                                :loading="getLoading"
+                                               @on-delete="OnDelete"
                                                @on-edit="OnUpdate"></DataTable>
                                 </v-card>
                             </v-col>
@@ -80,7 +80,7 @@
             ...mapGetters('deduction_group', ['getLoading', 'getDg']),
         },
         methods: {
-            ...mapActions('deduction_group', ['_get_deduction_group', '_post_deduction_group', '_put_deduction_group']),
+            ...mapActions('deduction_group', ['_get_deduction_group', '_post_deduction_group', '_put_deduction_group', '_delete_deduction_group']),
             create(payload) {
                 this._post_deduction_group(payload).then(() => {
                     this.visible = false
@@ -99,8 +99,18 @@
                 this.payload = payload
                 this.visible = true
             },
-            OnDelete(pk) {
-                console.log(pk)
+            OnDelete(payload) {
+                this.$confirm({
+                    title: 'Do you want to delete these items?',
+                    content: 'When you click the OK button this item will be deleted without recovery',
+                    onOk: () => {
+                        return this._delete_deduction_group(payload).catch(() => {
+                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                        })
+                    },
+                    onCancel: () => {
+                    },
+                });
             },
             afterVisibleChange(val) {
                 console.log('visible', val);

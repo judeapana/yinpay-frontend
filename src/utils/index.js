@@ -46,6 +46,7 @@ export const logoutUser = () => {
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('access_token')
     store.commit('auth/setLoggedIn', false)
+    store.commit('auth/setLoading', false)
     localStorage.clear()
 }
 
