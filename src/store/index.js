@@ -29,6 +29,14 @@ import user_attendance from './modules/payroll/user.attendance'
 import profile from "./modules/users/profile";
 import payroll from "./modules/reports/payroll"
 import payslip from "./modules/reports/payslip"
+import attendance_report from "./modules/reports/attendance"
+import dashboard_report from "./modules/reports/dashboard"
+import deduction_report from "./modules/reports/deductions"
+import earning_report from "./modules/reports/earnings"
+import leave_report from "./modules/reports/leave"
+import hrm_report from "./modules/reports/r.hrm"
+import payroll_report from "./modules/reports/r.payroll"
+import ssnit_report from "./modules/reports/ssnit"
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -59,6 +67,14 @@ export default new Vuex.Store({
         personnel_group,
         user_attendance,
         profile,
+        attendance_report,
+        dashboard_report,
+        deduction_report,
+        earning_report,
+        leave_report,
+        hrm_report,
+        payroll_report,
+        ssnit_report,
         department, bank, business_account, working_days
     },
     plugins: [createPersistedState()]

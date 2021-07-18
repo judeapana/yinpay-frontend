@@ -12,7 +12,7 @@
                         Business
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
-                    <v-btn class="mx-2" :to="{name:'reports'}" rounded>
+                    <v-btn :to="{name:'reports'}" class="mx-2" rounded>
                         Reports
                         <v-icon>mdi-content-paste</v-icon>
                     </v-btn>
@@ -23,7 +23,7 @@
                 <!--    navigation-->
                 <v-navigation-drawer app light v-if="getCurrentBs" v-model="drawer">
                     <template v-slot:prepend>
-                        <v-list-item two-line>
+                        <v-list-item :to="{name:'admin_dashboard'}" two-line>
                             <v-list-item-avatar>
                                 <v-img :src="logo"/>
                             </v-list-item-avatar>

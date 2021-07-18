@@ -12,11 +12,10 @@
             <v-list-item-content class="justify-center">
                 <div class="mx-auto">
                     <div class="text-center mt-3">
-
                         <v-avatar color="green" size="80">
                             <span class="white--text text-h3">{{ user.username[0] }}</span>
                         </v-avatar>
-                        <h3 class="mt-5">{{ user.email_address }}</h3>
+                        <h3 class="mt-4">{{ user.email_address }}</h3>
                         <p class="text-caption mt-1">
                             {{ user.email }}
                         </p>
@@ -45,7 +44,7 @@
                     </v-list>
                     <v-divider class="mt-4 pb-0 mb-3"></v-divider>
                     <div class="text-center">
-                        <v-btn @click="logout" color="grey" depressed outlined rounded> SignOut</v-btn>
+                        <v-btn small @click="logout" color="grey" depressed outlined rounded> SignOut</v-btn>
                     </div>
                 </div>
 

@@ -1,7 +1,6 @@
 <template>
     <AppLayout >
         <template v-slot:content>
-
             <router-view></router-view>
         </template>
     </AppLayout>
