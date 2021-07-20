@@ -76,6 +76,7 @@
                     }
                     this._post_upload_file(_payload).then(() => {
                         this.visible = false
+                        this.$store.dispatch('docs/_get_docs')
                     })
                 }).catch((e) => {
                     this.errors = e
@@ -113,7 +114,10 @@
                     content: 'When you click the OK button this item will be deleted without recovery',
                     onOk: () => {
                         return this._delete_docs(payload).catch(() => {
-                            this.$error({ title:"Error Occurred", content:"Sorry but an error occurred, we are working to fix this issue.Thank You" })
+                            this.$error({
+                                title: "Error Occurred",
+                                content: "Sorry but an error occurred, we are working to fix this issue.Thank You"
+                            })
                         })
                     },
                     onCancel: () => {

@@ -3,14 +3,14 @@ import axios from "axios";
 const state = {
     loading: false,
     errors: null,
-    payroll: null
+    attendance: null
 }
 const getters = {
     getLoading(state) {
         return state.loading
     },
-    getPayroll(state) {
-        return state.payroll
+    getAttendance(state) {
+        return state.attendance
     }
 }
 
@@ -21,13 +21,13 @@ const mutations = {
     setErrors(state, payload) {
         state.errors = payload
     },
-    setPayroll(state, payload) {
-        state.payroll = payload
+    setAttendance(state, payload) {
+        state.attendance = payload
     }
 }
 
 const actions = {
-    _get_payroll({commit}, payload) {
+    _get_attendance({commit}, payload) {
         commit('setLoading', true)
         commit('app/setErrors', null, {root: true})
         commit('app/setMsg', null, {root: true})
@@ -35,7 +35,7 @@ const actions = {
             axios.get('/reports/attendance', {params: payload}).then(({data}) => {
                 commit('setLoading', false)
                 commit('app/setErrors', null, {root: true})
-                commit('setPayroll', data)
+                commit('setAttendance', data)
                 resolve(data)
             }).catch((error) => {
                 commit('app/setErrors', error.response.data, {root: true})

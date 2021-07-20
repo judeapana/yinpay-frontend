@@ -181,7 +181,7 @@ export const routes = [
         ]
     },
     {
-        path: '*',
+        path: '/*',
         name: 'PageNotFound',
         component: PageNotFound
     },

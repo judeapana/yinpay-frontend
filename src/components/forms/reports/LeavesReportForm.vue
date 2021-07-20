@@ -1,6 +1,6 @@
 <template>
     <v-form @submit.prevent="$emit('on-submit',form)" ref="form" v-model="valid">
-        <v-date-picker elevation="2" full-width range v-model="form.date"></v-date-picker>
+        <v-date-picker show-week  elevation="2" full-width range v-model="form.date"></v-date-picker>
         <v-text-field
                 :rules="rules.date"
                 label="From Date n To Date"
