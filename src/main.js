@@ -21,7 +21,7 @@ Vue.use(VCountryRegionSelect)
 Vue.use(NProgress)
 
 // axios.defaults.baseURL = ;
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'http://api-yinpay.yinime.com' : 'http://127.0.0.1:5000';
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'https://yinpay.herokuapp.com' : 'http://127.0.0.1:5000';
 axios.defaults.headers['Authorization'] = `Bearer ${getToken()}`
 Vue.use(VueAxios, axios)
 
