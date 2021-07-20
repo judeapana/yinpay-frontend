@@ -1,19 +1,15 @@
 <template>
     <a-spin :spinning="getLoading" tip="Processing">
         <div class="spin-content">
-
             <v-sheet>
-
                 <v-app-bar app color="white" elevation="1" v-if="getCurrentBs">
                     <v-app-bar-nav-icon @click="drawer =!drawer"></v-app-bar-nav-icon>
                     <v-app-bar-title v-text="title"></v-app-bar-title>
                     <v-spacer></v-spacer>
-                    <v-btn @click="visible=!visible" rounded>
-                        Business
+                    <v-btn icon @click="visible=!visible" rounded>
                         <v-icon>mdi-plus</v-icon>
                     </v-btn>
-                    <v-btn :to="{name:'reports'}" class="mx-2" rounded>
-                        Reports
+                    <v-btn icon :to="{name:'reports'}" class="mx-2" rounded>
                         <v-icon>mdi-content-paste</v-icon>
                     </v-btn>
 
