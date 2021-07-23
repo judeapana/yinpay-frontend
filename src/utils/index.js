@@ -45,9 +45,9 @@ export const logoutUser = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('refresh_token')
     localStorage.removeItem('access_token')
+    localStorage.clear()
     store.commit('auth/setLoggedIn', false)
     store.commit('auth/setLoading', false)
-    localStorage.clear()
 }
 
 export const setAuthHeader = (payload) => {

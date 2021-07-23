@@ -26,6 +26,7 @@
                 const {response: {status}} = error;
                 if (status === 401) {
                     logoutUser()
+                    this.$router.push({name: 'SignIn'})
                     return Promise.reject(error)
                 }
                 return Promise.reject(error)
