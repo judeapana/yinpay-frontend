@@ -12,7 +12,7 @@ import {getToken} from "./utils";
 import store from './store/index'
 import FormMixin from './utils/form.mixin'
 import NProgress from 'vue-nprogress'
-
+import VueHtmlToPaper from "vue-html-to-paper";
 
 Vue.use(Antd)
 Vue.config.productionTip = false
@@ -27,6 +27,14 @@ Vue.use(VueAxios, axios)
 
 const nprogress = new NProgress()
 Vue.mixin(FormMixin)
+const options = {
+    styles: [
+        "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900",
+        "https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css",
+        "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css",
+    ]
+};
+Vue.use(VueHtmlToPaper, options);
 new Vue({
     nprogress,
     router,

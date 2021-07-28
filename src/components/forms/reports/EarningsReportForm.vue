@@ -24,7 +24,7 @@
                 valid: false,
                 period: [],
                 rules: {
-                    period: [this.required()],
+                    period_id: [this.required()],
                 },
                 form: {
                     period_id: '',
